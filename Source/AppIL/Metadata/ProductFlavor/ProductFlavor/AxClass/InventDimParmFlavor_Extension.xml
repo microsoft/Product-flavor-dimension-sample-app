@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventDimParmFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>InventDimParmFlavor_Extension</c> class extends the <c>InventDimParm</c> table with behavior for the flavor dimension.
+/// </summary>
+[ExtensionOf(tableStr(InventDimParm))]
+final class InventDimParmFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>parmInventFlavorFlag</Name>
+				<Source><![CDATA[
+    public NoYes parmInventFlavorFlag(NoYes _flavorFlag = this.getValueForDimension(classStr(InventProductDimensionFlavor)))
+    {
+        this.setValueForDimension(classStr(InventProductDimensionFlavor), _flavorFlag);
+
+        return _flavorFlag;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>fieldIdFlavor</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Returns the field id for the flavor dimension flag.
+    /// </summary>
+    /// <returns>The field id.</returns>
+    public static FieldID fieldIdFlavor()
+    {
+        return InventDimParm::getFieldIdForDimension(classStr(InventProductDimensionFlavor));
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

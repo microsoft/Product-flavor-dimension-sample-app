@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductMasterDimensionFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>EcoResProductMasterDimensionFlavor_Extension</c> class extends the <c>EcoResProductMasterDimension</c> form 
+/// in order to enable flavor product dimension on the form.
+/// </summary>
+[ExtensionOf(formStr(EcoResProductMasterDimension))]
+public final class EcoResProductMasterDimensionFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>ecoResProductMasterFlavor_InitValue</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on <c>EcoResProductMasterFlavor</c> data source InitValue event and changes form queries.
+    /// </summary>
+    /// <param name = "_sender">An object triggered the event.</param>
+    /// <param name = "_e">The event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, EcoResProductMasterFlavor), FormDataSourceEventType::InitValue)]
+    public void ecoResProductMasterFlavor_InitValue(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {
+        RefRecId flavor_ProductDimensionAttribute = EcoResProductDimensionAttribute::inventDimFieldId2DimensionAttributeRecId(InventDim::fieldIdFlavor());
+
+        this.addProductRange(
+            _sender.query().dataSourceName(_sender.name()),
+            fieldNum(EcoResProductMasterFlavor, FlavorProductDimensionAttribute),
+            queryValue(flavor_ProductDimensionAttribute));
+
+        this.addProductRange(_sender.query().dataSourceName(_sender.name()),
+            fieldNum(EcoResProductMasterFlavor, FlavorProductMaster),
+            queryValue(productMasterCaller.RecId));
+
+        // add sort by display order field.
+        _sender.queryBuildDataSource().addSortField(fieldNum(EcoResProductMasterFlavor, RetailDisplayOrder));
+
+        ecoResProductMasterFlavor.FlavorProductDimensionAttribute = flavor_ProductDimensionAttribute;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>ecoResProductMasterFlavor_Created</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on <c>EcoResProductMasterFlavor</c> data source Created event and set the focus to the dimension name field.
+    /// </summary>
+    /// <param name = "_sender">An object triggered the event.</param>
+    /// <param name = "_e">The event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, EcoResProductMasterFlavor), FormDataSourceEventType::Created)]
+    public void ecoResProductMasterFlavor_Created(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {
+        EcoResFlavor_Name.setFocus();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>ecoResProductMasterFlavor_ValidatingWrite</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on <c>EcoResProductMasterFlavor</c> data source ValidatingWrite event and makes sure the <c>EcoResFlavor</c> is created.
+    /// </summary>
+    /// <param name = "_sender">An object triggered the event.</param>
+    /// <param name = "_e">The event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, EcoResProductMasterFlavor), FormDataSourceEventType::ValidatingWrite)]
+    public void ecoResProductMasterFlavor_ValidatingWrite(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {
+        ttsbegin;
+
+        EcoResFlavor ecoResFlavorLocal = EcoResFlavor::findByName(ecoResFlavor.Name);
+        if (!ecoResFlavorLocal.RecId)
+        {
+            ecoResFlavorLocal.Name = ecoResFlavor.Name;
+            ecoResFlavorLocal.insert();
+        }
+
+        ecoResProductMasterFlavor.Flavor = ecoResFlavorLocal.RecId;
+
+        if (ecoResFlavor.RecId != ecoResFlavorLocal.RecId)
+        {
+            ecoResFlavor.data(ecoResFlavorLocal);
+
+            FormDataSource ecoResFlavor_ds = _sender.formRun().dataSource(formDataSourceStr(EcoResProductMasterDimension, EcoResFlavor)) as FormDataSource;
+            ecoResFlavor_ds.setCurrent();
+        }
+
+        ttscommit;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>ecoResFlavor_Initialized</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on <c>EcoResProductMasterDimension</c> form Initialized event and overrides controls behavior to provide standard user experience.
+    /// </summary>
+    /// <param name = "_sender">An object triggered the event.</param>
+    /// <param name = "_e">The event arguments.</param>
+    [FormEventHandler(formStr(EcoResProductMasterDimension), FormEventType::Initialized)]
+    public void ecoResFlavor_Initialized(xFormRun _sender, FormEventArgs _e)
+    {
+        if (EcoResFlavor_Name)
+        {
+            EcoResFlavor_Name.registerOverrideMethod(methodStr(FormStringControl, jumpRef), formMethodStr(EcoResProductMasterDimension, ecoResFlavor_Name_JumpRef), this);
+            EcoResFlavor_Name.registerOverrideMethod(methodStr(FormStringControl, lookup), formMethodStr(EcoResProductMasterDimension, ecoResFlavor_Name_lookup), this);
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>ecoResFlavor_Name_Lookup</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Provides standard lookup user experience for the dimension name.
+    /// </summary>
+    /// <param name = "_sender">The dimension name form control.</param>
+    public void ecoResFlavor_Name_Lookup(FormControl _sender)
+    {
+        EcoResFlavor::lookupName(_sender, true);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>ecoResFlavor_Name_JumpRef</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Provides standard jumpref user experience for the dimension name.
+    /// </summary>
+    /// <param name = "_sender">The dimension name form control.</param>
+    public void ecoResFlavor_Name_JumpRef(FormControl _sender)
+    {
+        EcoResFlavor::jumpRef(_sender.valueStr());
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>productMasDimValueTranslationFlavor_InitValue</Name>
+				<Source><![CDATA[
+     ///<summary>
+     ///Hooks on <c>ProductMasDimValueTranslationFlavor</c> data source InitValue event and sets initial field values.
+     ///</summary>
+     ///<param name = "_sender">An object triggered the event.</param>
+     ///<param name = "_e">The event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor), FormDataSourceEventType::InitValue)]
+    public void productMasDimValueTranslationFlavor_InitValue(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {   
+        ProductMasDimValueTranslationFlavor.ProductMasterDimensionValue = this.parmInitialFK(); //Initialize to a non-zero value in order to avoid validateWrite to fail
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>productMasDimValueTranslationFlavor_ValidatingWrite</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on <c>ProductMasDimValueTranslationFlavor</c> data source ValidatingWrite event and updates the link to product master dimension value.
+    /// </summary>
+    /// <param name = "_sender">An object triggered the event.</param>
+    /// <param name = "_e">The event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor), FormDataSourceEventType::ValidatingWrite)]
+    public void productMasDimValueTranslationFlavor_ValidatingWrite(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {
+        this.validateWriteHelper(ProductMasDimValueTranslationFlavor, EcoResProductMasterFlavor.RecId);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>productMasDimValueTranslationFlavor_Writing</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on <c>ProductMasDimValueTranslationFlavor</c> data source Writing event and writes translations to the db.
+    /// </summary>
+    /// <param name = "_sender">An object triggered the event.</param>
+    /// <param name = "_e">The event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor), FormDataSourceEventType::Writing)]
+    public void productMasDimValueTranslationFlavor_Writing(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {
+        FormRun formRun = _sender.formRun();
+        FormDataSource ecoResProductMasterFlavor_ds = formRun.dataSource(formDataSourceStr(EcoResProductMasterDimension, EcoResProductMasterFlavor)) as FormDataSource;
+        FormDataSource ProductMasDimValueTranslationFlavor_ds = formRun.dataSource(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor)) as FormDataSource;
+
+        this.writeHelper(ProductMasDimValueTranslationFlavor, EcoResProductMasterFlavor, ProductMasDimValueTranslationFlavor_ds, ecoResProductMasterFlavor_ds as FormDataSource);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>productMasDimValueTranslationFlavor_Initialized</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on the <c>ProductMasDimValueTranslationFlavor</c> data source Initialized event and adjusts the data source query.
+    /// </summary>
+    /// <param name = "_sender">An object triggered the event.</param>
+    /// <param name = "_e">The event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor), FormDataSourceEventType::Initialized)]
+    public void productMasDimValueTranslationFlavor_Initialized(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {
+        FormRun formRun = _sender.formRun();
+        FormDataSource ProductMasDimValueTranslationFlavor_ds = formRun.dataSource(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor)) as FormDataSource;
+
+        QueryBuildDataSource qbds = ProductMasDimValueTranslationFlavor_ds.query().dataSourceTable(tableNum(EcoResProductMasterDimValueTranslation));
+
+        this.initHelperAddRangeLink(qbds, fieldNum(EcoResProductMasterFlavor, RecId));
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>initInventDimensionsMetadataEntries</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Extends the original class method in order to add metadata for the new dimension.
+    /// </summary>
+    protected void initInventDimensionsMetadataEntries()
+    {
+        next initInventDimensionsMetadataEntries();
+        
+        this.addInventDimensionMetadata(
+            InventDim::fieldIdFlavor(),
+            tabPageFlavors,
+            EcoResProductMasterFlavor_RetailDisplayOrder);
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

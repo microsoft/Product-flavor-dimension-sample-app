@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductDimensionDataModelFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>EcoResProductDimensionDataModelFlavor_Extension</c> class extends 
+/// the <c>EcoResProductDimensionDataModel</c> class in order to add flavor dimension data model info.
+/// </summary>
+[ExtensionOf(classStr(EcoResProductDimensionDataModel))]
+public final class EcoResProductDimensionDataModelFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>build</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Extends the original class build method and ands flavor dimension data model info.
+    /// </summary>
+    protected void build()
+    {
+        next build();
+
+        this.addEntry(InventDim::fieldIdFlavor(), tableNum(EcoResFlavor), tableNum(EcoResProductMasterFlavor), tableNum(EcoResProductVariantFlavor));
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

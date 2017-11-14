@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventProductDimensionLookupFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>InventProductDimensionLookupFlavor_Extension</c> class extends <c>InventProductDimensionLookup</c> form in order to add new flavor dimension functionality.
+/// </summary>
+[ExtensionOf(formStr(InventProductDimensionLookup))]
+final public class InventProductDimensionLookupFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>initInventDimensionMetadataEntries</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Extends the original class method in order to add metadata for the new dimension.
+    /// </summary>
+    protected void initInventDimensionMetadataEntries()
+    {
+        next initInventDimensionMetadataEntries();
+
+        this.addInventDimensionMetadata(
+            InventDim::fieldIdFlavor(),
+            extendedTypeNum(EcoResFlavorName),
+            fieldNum(RetailTmpDimensionValueDisplayOrder, EcoResFlavor));
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

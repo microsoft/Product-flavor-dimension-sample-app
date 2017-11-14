@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxMenuExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="Microsoft.Dynamics.AX.Metadata.V1">
+	<Name>ProductInformationManagement.Extension</Name>
+	<Customizations />
+	<Elements>
+		<AxMenuExtensionElement xmlns="">
+			<Parent>DimensionAndVariantGroups</Parent>
+			<MenuElement xmlns=""
+				i:type="AxMenuElementMenuItem">
+				<Name>RetailEcoResFlavor</Name>
+				<MenuItemName>RetailEcoResFlavor</MenuItemName>
+				<ShowParentModule>No</ShowParentModule>
+			</MenuElement>
+		</AxMenuExtensionElement>
+		<AxMenuExtensionElement xmlns="">
+			<Parent>DimensionAndVariantGroups</Parent>
+			<MenuElement xmlns=""
+				i:type="AxMenuElementMenuItem">
+				<Name>RetailFlavorGroupTable</Name>
+				<MenuItemName>RetailFlavorGroupTable</MenuItemName>
+				<ShowParentModule>No</ShowParentModule>
+			</MenuElement>
+		</AxMenuExtensionElement>
+	</Elements>
+	<MenuElementModifications />
+	<PropertyModifications />
+</AxMenuExtension>

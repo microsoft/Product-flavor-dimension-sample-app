@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventDimFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>InventDimFlavor_Extension</c> class extends the <c>InventDim</c> table with behavior for the flavor dimension.
+/// </summary>
+[ExtensionOf(tableStr(InventDim))]
+final class InventDimFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>parmInventFlavorId</Name>
+				<Source><![CDATA[
+    public EcoResFlavorName parmInventFlavorId(EcoResFlavorName _flavor = this.getValueForDimension(classStr(InventProductDimensionFlavor)))
+    {
+        if (!prmIsDefault(_flavor))
+        {
+            this.setValueForDimension(classStr(InventProductDimensionFlavor), _flavor);
+        }
+
+        return _flavor;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>fieldIdFlavor</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Returns the field id for the flavor dimension.
+    /// </summary>
+    /// <returns>The field id.</returns>
+    public static FieldID fieldIdFlavor()
+    {
+        return InventDim::getFieldIdForDimension(classStr(InventProductDimensionFlavor));
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

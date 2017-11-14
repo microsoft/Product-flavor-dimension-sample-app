@@ -1,0 +1,100 @@
+Name=Flavor
+ ;Flavor dimension title.
+EcoResFlavor_Description=Description
+ ;Flavor dimension description.
+EcoResFlavor_AdditionalDescription=Additional description
+ ;Flavor additional dimension description.
+RetailEcoResFlavor_Title=Flavors
+ ;Flavors form title.
+EcoResFlavor_Title=Flavors
+ ;EcoResFlavor table title.
+EcoResFlavor_DeveloperDocumentation=The table contains product dimension flavor values.
+ ;{locked} EcoResFlavor developer documentation.
+ProductDimensionName=Product dimension - flavor
+ ;Product dimension name.
+EcoResProductMasterFlavor_Name=Product masters flavors
+ ;The EcoResProductMasterFlavor table  name.
+EcoResProductMasterFlavor_DeveloperDocumentation=The table contains flavors assigned to product masters.
+ ;{locked} EcoResProductMasterFlavor developer  documentation.
+EcoResProductVariantFlavor_DeveloperDocumentation=The table contains flavors assigned to product variants.
+ ;{locked} EcoResProductVariantFlavor developer documentation.
+EcoResProductVariantFlavor_Name=Product variants flavors
+ ;The EcoResProductVariantFlavor table  name.
+EcoResProductMasterDimension_FlavorsTabCaption=Flavors
+ ;EcoResProductMasterDimension form flavors tab caption.
+EcoResProductMasterDimension_FlavorsTabInstructions=Define flavors for a product master
+ ;EcoResProductMasterDimension form flavors tab instructions.
+RetailFlavorGroupId_Name=Flavor group
+ ;The RetailFlavorGroupId EDT name.
+RetailFlavorGroupTable_Name=Flavor group
+ ;The RetailFlavorGroupTable table name.
+RetailFlavorGroupTable_DeveloperDocumentation=The table contains flavor groups.
+ ;{locked} The RetailFlavorGroupTable table developer  documentation.
+EcoResProductVariantFlavorDisplayOrderView_NameColumn=Flavor name
+ ;The EcoResProductVariantFlavorDisplayOrderView view Name column name.
+EcoResProductVariantFlavorDisplayOrderView_Label=Product variant flavors
+ ;The EcoResProductVariantFlavorDisplayOrderView view label.
+EcoResProductVariantFlavorDisplayOrderView_DeveloperDocumentation=The view contains product variant flavors.
+ ;The EcoResProductVariantFlavorDisplayOrderView view developer documentation.
+EcoResProductVariants_EcoResProductVariantFlavor_RetailWeight_Label=Flavor weight
+ ;Label for Flavor retail weight field on the EcoResProductVariants form.
+EcoResNomenclatureSegmentSampleValue=Sweet
+ ;Sample flavor.
+EcoResNomenclatureSegmentFlavorDimensionValueName_Label=Flavor name
+ ;The EcoResNomenclatureSegmentFlavorDimensionValueName table label.
+EcoResNomenclatureSegmentFlavorDimensionValueName_DeveloperDocumentation=The table contains flavor names.
+ ;The EcoResNomenclatureSegmentFlavorDimensionValueName table developer documentation.
+InventTable_GroupPrompt=Flavor
+ ;The InventTable table group prompt.
+InventTable_StandardInventFlavorId_Label=Standard flavor
+ ;The InventTable table StandardInventFlavorId filed label.
+InventTable_AltInventFlavorId_Label=Alternative flavor
+ ;The InventTable table AltInventFlavorId filed label.
+EcoResProductVariantFlavorDisplayOrderView_RetailDisplayOrder_Label=Flavor Display Order
+ ;The EcoResProductVariantFlavorDisplayOrderView table RetailDisplayOrder column label.
+RetailFlavorGroupTable_DisplayMenuItem_Label=Flavor groups
+ ;RetailFlavorGroupTable menu item label.
+RetailFlavorGroupsView_Label=View retail flavor groups
+ ;RetailFlavorGroupsView security priviledge label.
+RetailFlavorGroupsMaintain_Label=Maintain retail flavor groups
+ ;RetailFlavorGroupsMaintain security priviledge label.
+ProductFlavorGroupTable_Form_Caption=Flavor groups
+ ;ProductFlavorGroupTable form caption.
+RetailFlavorsMaintain_Label=Maintain retail flavors
+ ;RetailFlavorsMaintain security priviledge label.
+RetailEcoResFlavorsMaintain_Label=Maintain retail EcoResFlavor
+ ;RetailEcoResFlavorsMaintain security priviledge label.
+RetailEcoResFlavorsView_Label=View flavors
+ ;RetailEcoResFlavorsView security priviledge label.
+RetailFlavorId_Label=Flavor
+ ;RetailFlavorId EDT label.
+RetailFlavorGroupTrans_BarcodeLengthValidation_Message=The number in the bar code must be the same length as the number in the bar code for all codes in this flavor group.
+ ;Barcode length validation message.
+RetailFlavorGroupTrans_BarcodeLengthValidation_FixHint=The number in the bar code must be the same length as the number in the bar code for all codes in this flavor group. Add zeros at the beginning of the number to make it length %1?
+ ;Barcode length validation fix hint.
+RetailFlavorGroupTrans_NoInBarcodeValidation_Message=Flavor '%1' has the same 'No in bar code'.
+ ;No in barcode validation message.
+RetailFlavorGroupTransDescription_Label=Flavor description
+ ;RetailFlavorGroupTransDescription EDT label.
+RetailFlavorGroupTransName_Label=Flavor name
+ ;RetailFlavorGroupTransName EDT label.
+RetailFlavorGroupTransTranslation_Label=Translations of values in the RetailFlavorGroupTrans table
+ ;RetailFlavorGroupTransTranslation table label.
+RetailFlavorGroupTransTranslation_DeveloperDocumentation=The RetailFlavorGroupTransTranslation table stores the translations for the flavor group elements.
+ ;RetailFlavorGroupTransTranslation table developer documentation.
+EcoResNomenclatureSegmentFlavorDimensionValue_Label=Flavor id
+ ;EcoResNomenclatureSegmentFlavorDimensionValue table label.
+EcoResNomenclatureSegmentFlavorDimensionValue_DeveloperDocumentation=The EcoResNomenclatureSegmentFlavorDimensionValue table extends EcoResNomenclatureSegment and indicates that the segment should pick up the value from the flavor dimension
+ ;EcoResNomenclatureSegmentFlavorDimensionValue table developer documentation.
+RetailFlavorGroupTrans_Label=Flavor group lines
+ ;RetailFlavorGroupTrans table label.
+RetailFlavorGroupTrans_DeveloperDocumentation=The RetailFlavorGroupTrans table contains the list of flavor groups and their description
+ ;RetailFlavorGroupTrans table developer documentation.
+EcoResProductMaster_ChangeFlavorGroup_Message=By changing the flavor group you will change this product's flavor to the flavors of the new group and reset all combinations for the product.
+ ;Warning for changing a flavor product master dimension group.
+EcoResProductMaster_ChangeFlavorGroup_Confirmation=Are you sure you want to change the flavor group?
+ ;Request for confirmation message  to change a flavor product master dimension group.
+EcoResProductMaster_ChangeFlavorGroup_Title=New Text
+ ;Change a flavor product master dimension group message title.
+RetailFlavorGroupTable_FlavorGroupLines=Flavor group lines
+ ;Flavor group lines header on the RetailFlavorGroupTable form.

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTable xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductVariantFlavor</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+public class EcoResProductVariantFlavor extends EcoResProductVariantDimensionValue
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>getDimensionValue</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Gets the dimension value of the derived type.
+    /// </summary>
+    /// <returns>
+    /// The dimension value ID of the table that inherits from the
+    /// <c>EcoResProductVariantDimensionValue</c> table.
+    /// </returns>
+    /// <remarks>
+    /// This method must be overridden on tables deriving the <c>EcoResProductVariantDimensionValue</c>
+    /// table.
+    /// </remarks>
+    public RefRecId getDimensionValue()
+    {
+        return this.Flavor;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>getTableId</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Gets the table ID of the derived type.
+    /// </summary>
+    /// <returns>
+    /// The table ID of the table that inherits from the <c>EcoResProductVariantDimensionValue</c> table.
+    /// </returns>
+    /// <remarks>
+    /// This method must be overridden on tables deriving the <c>EcoResProductVariantDimensionValue</c>
+    /// table.
+    /// </remarks>
+    /// <exception cref="M:Exception::Error">
+    /// Throws a missing override exception if the method has not been overridden.
+    /// </exception>
+    public TableId getTableId()
+    {
+        return this.TableId;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>getExtension</Name>
+				<Source><![CDATA[
+    public TableExtension getExtension()
+    {
+        return SysTableExtension::construct();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>getDefaultingDependencies</Name>
+				<Source><![CDATA[
+    public container getDefaultingDependencies()
+    {
+        return [
+            [FieldNum(EcoResProductVariantDimensionValue, RetailWeight), [fieldNum(EcoResProductVariantFlavor, Flavor)]],
+            [FieldNum(EcoResProductVariantDimensionValue, ProductDimensionAttribute), [fieldNum(EcoResProductVariantFlavor, Flavor)]]
+
+        ];
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>defaultField</Name>
+				<Source><![CDATA[
+    public void defaultField(FieldId _fieldId)
+    {
+        super(_fieldId);
+
+        switch (_fieldId)
+        {
+            case fieldNum(EcoResProductVariantDimensionValue, RetailWeight):
+                this.defaultFieldRetailWeight();
+                break;
+
+            case fieldNum(EcoResProductVariantDimensionValue, ProductDimensionAttribute):
+                this.ProductDimensionAttribute = EcoResProductDimensionAttribute::inventDimFieldId2DimensionAttributeRecId(InventDim::fieldIdFlavor());
+                break;
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>defaultFieldRetailWeight</Name>
+				<Source><![CDATA[
+    private void defaultFieldRetailWeight()
+    {
+        const int defaultDistinctProductVariant = 1;
+        if (this.DistinctProductVariant > defaultDistinctProductVariant)
+        {
+            EcoResDistinctProductVariant ecoResDistinctProductVariant;
+            EcoResProductMaster ecoResProductMaster;
+            EcoResProductMasterFlavor ecoResProductMasterFlavor;
+
+            select firstonly RetailWeight
+                from ecoResProductMasterFlavor
+                join ecoResDistinctProductVariant
+                exists join ecoResProductMaster
+                where ecoResDistinctProductVariant.RecId == this.DistinctProductVariant
+                    && ecoResProductMaster.RecId == ecoResDistinctProductVariant.ProductMaster
+                    &&  ecoResProductMasterFlavor.FlavorProductMaster == ecoResProductMaster.RecId
+                    && ecoResProductMasterFlavor.Flavor == this.Flavor;
+
+            if (ecoResProductMasterFlavor.RecId)
+            {
+                this.RetailWeight = ecoResProductMasterFlavor.RetailWeight;
+
+                ecoResDistinctProductVariant.selectForUpdate(true);
+
+                ecoResDistinctProductVariant.RetaiTotalWeight =
+                            (ecoResDistinctProductVariant.RetaiTotalWeight ? ecoResDistinctProductVariant.RetaiTotalWeight : 1)
+                            * (this.RetailWeight ? this.RetailWeight : 1);
+
+                ecoResDistinctProductVariant.update();
+            }
+            else
+            {
+                throw error (strFmt("@SCM:ErrorProductDimensionValueInvalid", "@SYS73726"));
+            }
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>find</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Finds the specified record in the <c>EcoResProductVariantFlavor</c> table.
+    /// </summary>
+    /// <param name="_distinctProductVariant">
+    ///    The ID of the <c>EcoResDistinctProductVariant</c> record id.
+    /// </param>
+    /// <param name="_productDimensionAttribute">
+    ///    The ID of the <c>EcoResProductDimensionAttribute</c> record id.
+    /// </param>
+    /// <param name="_forUpdate">
+    ///    A Boolean value that indicates whether to read the record for update; optional.
+    /// </param>
+    /// <returns>
+    ///    A record in the <c>EcoResProductVariantFlavor</c> table; otherwise, an empty record.
+    /// </returns>
+    public static EcoResProductVariantFlavor find(EcoResProductRecId _distinctProductVariant, RefRecId _productDimensionAttribute, boolean _forUpdate = false)
+    {
+        EcoResProductVariantFlavor ecoResProductVariantFlavor;
+
+        ecoResProductVariantFlavor.selectForUpdate(_forUpdate);
+
+        select firstonly ecoResProductVariantFlavor
+            where ecoResProductVariantFlavor.DistinctProductVariant == _distinctProductVariant
+                && ecoResProductVariantFlavor.ProductDimensionAttribute == _productDimensionAttribute;
+
+        return ecoResProductVariantFlavor;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<DeveloperDocumentation>@ProductFlavor:EcoResProductVariantFlavor_DeveloperDocumentation</DeveloperDocumentation>
+	<EntityRelationshipType>Relationship</EntityRelationshipType>
+	<FormRef>EcoResProductVariantsAction</FormRef>
+	<Label>@ProductFlavor:EcoResProductVariantFlavor_Name</Label>
+	<TableGroup>Main</TableGroup>
+	<TitleField1>Flavor</TitleField1>
+	<CacheLookup>Found</CacheLookup>
+	<Extends>EcoResProductVariantDimensionValue</Extends>
+	<SaveDataPerCompany>No</SaveDataPerCompany>
+	<SupportInheritance>Yes</SupportInheritance>
+	<DeleteActions />
+	<FieldGroups>
+		<AxTableFieldGroup>
+			<Name>AutoReport</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Flavor</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoLookup</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoIdentification</Name>
+			<AutoPopulate>Yes</AutoPopulate>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoSummary</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoBrowse</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>Setup</Name>
+			<Label>@SYS2186</Label>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Flavor</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+	</FieldGroups>
+	<Fields>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldInt64">
+			<Name>Flavor</Name>
+			<AllowEdit>No</AllowEdit>
+			<ExtendedDataType>EcoResFlavorRecId</ExtendedDataType>
+			<Mandatory>Yes</Mandatory>
+		</AxTableField>
+	</Fields>
+	<FullTextIndexes />
+	<Indexes>
+		<AxTableIndex>
+			<Name>FK_EcoResFlavor</Name>
+			<AllowDuplicates>Yes</AllowDuplicates>
+			<Fields>
+				<AxTableIndexField>
+					<DataField>Flavor</DataField>
+				</AxTableIndexField>
+			</Fields>
+		</AxTableIndex>
+	</Indexes>
+	<Mappings />
+	<Relations>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>EcoResFlavor</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<OnDelete>Restricted</OnDelete>
+			<RelatedTable>EcoResFlavor</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelatedTableRole>SourceFlavor</RelatedTableRole>
+			<RelationshipType>Association</RelationshipType>
+			<Role>VariantFlavor</Role>
+			<UseDefaultRoleNames>No</UseDefaultRoleNames>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>Flavor</Name>
+					<Field>Flavor</Field>
+					<RelatedField>RecId</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>RecId</Index>
+		</AxTableRelation>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>EcoResProductVariantDimensionValue_1</Name>
+			<Cardinality>ZeroOne</Cardinality>
+			<RelatedTable>EcoResProductVariantDimensionValue</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelatedTableRole>EcoResProductVariantDimensionValue_1</RelatedTableRole>
+			<RelationshipType>Specialization</RelationshipType>
+			<Role>EcoResProductVariantDimensionValue_1_EcoResProductVariantFlavor</Role>
+			<UseDefaultRoleNames>No</UseDefaultRoleNames>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>RecId</Name>
+					<Field>RecId</Field>
+					<RelatedField>RecId</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>RecId</Index>
+		</AxTableRelation>
+	</Relations>
+	<StateMachines />
+</AxTable>

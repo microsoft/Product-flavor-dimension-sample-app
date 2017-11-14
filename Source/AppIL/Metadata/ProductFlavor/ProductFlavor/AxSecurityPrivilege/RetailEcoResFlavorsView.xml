@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxSecurityPrivilege xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>RetailEcoResFlavorsView</Name>
+	<Description>@ProductFlavor:RetailEcoResFlavorsView_Label</Description>
+	<Label>@ProductFlavor:RetailEcoResFlavorsView_Label</Label>
+	<DataEntityPermissions />
+	<DirectAccessPermissions />
+	<EntryPoints>
+		<AxSecurityEntryPointReference>
+			<Name>RetailEcoResFlavor</Name>
+			<Grant>
+				<Read>Allow</Read>
+			</Grant>
+			<ObjectName>RetailEcoResFlavor</ObjectName>
+			<ObjectType>MenuItemDisplay</ObjectType>
+			<Forms>
+				<AxSecurityEntryPointReferenceForm>
+					<Name>RetailEcoResFlavor</Name>
+					<Controls />
+					<DataSources />
+				</AxSecurityEntryPointReferenceForm>
+			</Forms>
+		</AxSecurityEntryPointReference>
+	</EntryPoints>
+	<FormControlOverrides />
+</AxSecurityPrivilege>

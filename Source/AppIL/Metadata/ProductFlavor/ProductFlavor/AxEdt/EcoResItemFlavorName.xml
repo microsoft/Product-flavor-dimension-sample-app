@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxEdt xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns=""
+	i:type="AxEdtString">
+	<Name>EcoResItemFlavorName</Name>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<Extends>EcoResFlavorName</Extends>
+	<FormHelp>InventProductDimensionLookup</FormHelp>
+	<Label>@ProductFlavor:Name</Label>
+	<ArrayElements />
+	<Relations />
+	<TableReferences />
+</AxEdt>

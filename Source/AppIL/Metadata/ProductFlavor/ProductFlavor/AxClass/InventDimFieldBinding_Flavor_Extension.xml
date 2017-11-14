@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventDimFieldBinding_Flavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>InventDimFieldBindingFlavor_Extension</c> class extends className2FieldName method from the <c>InventDimFieldBinding</c> 
+/// in order to map flavor product dimension to <c>InventDimension1</c> field.
+/// </summary>
+[ExtensionOf(tableStr(InventDimFieldBinding))]
+public final class InventDimFieldBinding_Flavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>className2FieldName</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Extends the method from the <c>InventDimFieldBinding</c> class and maps the field from <c>InventDim</c> table to the <c>InventProductDimensionFlavor</c> class.
+    /// </summary>
+    /// <param name = "_className">A class name to get a corresponding field Id for.</param>
+    /// <returns>Corresponding field Id from the <c>InventDim</c> table.</returns>
+    protected static FieldName className2FieldName(ClassName _className)
+    {
+        var fieldName = next className2FieldName(_className);
+        
+        if (_className == classStr(InventProductDimensionFlavor))
+        {
+            return fieldStr(InventDim, InventDimension1);
+        }
+
+        return fieldName;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

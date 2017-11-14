@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxFormExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="Microsoft.Dynamics.AX.Metadata.V6">
+	<Name>EcoResProductReleaseSessions.Extension</Name>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<ControlModifications />
+	<Controls>
+		<AxFormExtensionControl xmlns="">
+			<Name>FormExtensionControl3dynd4051</Name>
+			<FormControl xmlns=""
+				i:type="AxFormReferenceGroupControl">
+				<Name>EcoResProductVariantFlavor_Flavor</Name>
+				<FilterExpression>%1</FilterExpression>
+				<Type>ReferenceGroup</Type>
+				<FormControlExtension
+					i:nil="true" />
+				<Controls />
+				<DataSource>EcoResProductVariantFlavor</DataSource>
+				<ReferenceField>Flavor</ReferenceField>
+			</FormControl>
+			<Parent>GridProductVariants</Parent>
+		</AxFormExtensionControl>
+	</Controls>
+	<DataSources>
+		<AxFormDataSource xmlns="">
+			<Name>EcoResProductVariantFlavor</Name>
+			<Table>EcoResProductVariantFlavor</Table>
+			<Fields>
+				<AxFormDataSourceField>
+					<DataField>DistinctProductVariant</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>Flavor</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>InstanceRelationType</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>Partition</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>ProductDimensionAttribute</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>RecId</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>RetailWeight</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>TableId</DataField>
+				</AxFormDataSourceField>
+			</Fields>
+			<ReferencedDataSources />
+			<JoinSource>EcoResDistinctProductVariant</JoinSource>
+			<LinkType>OuterJoin</LinkType>
+			<AllowCheck>No</AllowCheck>
+			<AllowCreate>No</AllowCreate>
+			<AllowDelete>No</AllowDelete>
+			<AllowEdit>No</AllowEdit>
+			<DataSourceLinks />
+			<DerivedDataSources />
+		</AxFormDataSource>
+	</DataSources>
+	<Parts />
+	<PropertyModifications />
+</AxFormExtension>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTableExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductMaster.Extension</Name>
+	<FieldGroupExtensions>
+		<AxTableFieldGroupExtension>
+			<Name>RetailVariants</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>RetailFlavorGroupId</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroupExtension>
+	</FieldGroupExtensions>
+	<FieldGroups />
+	<FieldModifications />
+	<Fields>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>RetailFlavorGroupId</Name>
+			<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+			<ExtendedDataType>RetailFlavorGroupId</ExtendedDataType>
+		</AxTableField>
+	</Fields>
+	<Indexes />
+	<Mappings />
+	<PropertyModifications />
+	<Relations>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>RetailFlavorGroupTable</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<EDTRelation>Yes</EDTRelation>
+			<OnDelete>Restricted</OnDelete>
+			<RelatedTable>RetailFlavorGroupTable</RelatedTable>
+			<RelatedTableCardinality>ZeroOne</RelatedTableCardinality>
+			<RelationshipType>Association</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>RetailFlavorGroupId</Name>
+					<SourceEDT>RetailFlavorGroupId</SourceEDT>
+					<Field>RetailFlavorGroupId</Field>
+					<RelatedField>flavorGroup</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+		</AxTableRelation>
+	</Relations>
+</AxTableExtension>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxEdtExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventDimension1.Extension</Name>
+	<ArrayElements />
+	<PropertyModifications>
+		<AxPropertyModification>
+			<Name>StringSize</Name>
+			<Value>30</Value>
+		</AxPropertyModification>
+	</PropertyModifications>
+</AxEdtExtension>

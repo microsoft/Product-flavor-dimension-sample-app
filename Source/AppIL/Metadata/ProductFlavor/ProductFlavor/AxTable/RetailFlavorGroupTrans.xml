@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTable xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>RetailFlavorGroupTrans</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+public class RetailFlavorGroupTrans extends common
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>checkFlavorLength</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Updates the number in bar code if the length is not same as the number in the bar code of all codes in the current flavor group.
+    /// </summary>
+    /// <remarks>
+    /// throws error if the barcode is too long.
+    /// </remarks>
+    /// <exception cref="Exception::Error">
+    /// Maximum length error in barcode.
+    /// </exception>
+    /// <exception cref="Exception::Error">
+    /// Number mismatch error in bar code.
+    /// </exception>
+    void checkFlavorLength()
+    {
+        RetailFlavorGroupTrans flavorGroupTrans,flavorGroupTrans2;
+        int newLength, lengthOfOthers;
+        str newNumber;
+
+        select firstonly flavorGroupTrans
+            where   flavorGroupTrans.FlavorGroup == this.FlavorGroup
+            &&      flavorGroupTrans.Flavor != this.Flavor;
+
+        if (flavorGroupTrans)
+        {
+            newLength = strLen(this.NoInBarcode);
+            lengthOfOthers = strLen(flavorGroupTrans.NoInBarcode);
+            if ((newLength > lengthOfOthers) && (lengthOfOthers != 0))
+            {
+                if (Box::yesNo("@ProductFlavor:RetailFlavorGroupTrans_BarcodeLengthValidation_Message" + "@RET3935",
+						DialogButton::Yes,"@RET3499","@RET3936") == DialogButton::Yes)
+                {
+                    ttsbegin;
+                    while select forupdate flavorGroupTrans2
+                    where   flavorGroupTrans2.FlavorGroup == this.FlavorGroup
+                    &&      flavorGroupTrans2.Flavor != this.Flavor
+                    {
+                        newNumber = strIns(flavorGroupTrans2.NoInBarcode,subStr('0000000000', 1, (newLength - strLen(flavorGroupTrans2.NoInBarcode))),1);
+                        flavorGroupTrans2.NoInBarcode = newNumber;
+                        flavorGroupTrans2.update();
+                        ttscommit;
+                    }
+                }
+                else
+                {
+                    throw error(strFmt("@RET3937", lengthOfOthers));
+                }
+            }
+            else
+            {
+                if (newLength < lengthOfOthers)
+                {
+                    throw error(strFmt("@ProductFlavor:RetailFlavorGroupTrans_BarcodeLengthValidation_FixHint", lengthOfOthers));
+                }
+            }
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>generateVariantDescriptions</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///     Update the variant descriptions for all variants of product masters in the flavor group.
+    /// </summary>
+    /// <remarks>
+    ///     All existing variant descriptions related to the flavor group will be replaced.
+    /// </remarks>
+    public void generateVariantDescriptions()
+    {
+        EcoResProductMaster ecoResProductMaster;
+
+        while select RecId from ecoResProductMaster
+                where ecoResProductMaster.RetailFlavorGroupId == this.FlavorGroup
+        {
+            EcoResProductMaster::updateVariantDescriptions(ecoResProductMaster.RecId);
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>insertUpdateInventFlavor</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Inserts or updates the record in <c>EcoResProductMasterFlavor</c> table.
+    /// </summary>
+    /// <returns>
+    /// Always returns true.
+    /// </returns>
+    /// <remarks>
+    /// This method is used to insert the records into <c>EcoResProductMasterFlavor</c> table if does not exist else update.
+    /// </remarks>
+    public boolean insertUpdateInventFlavor()
+    {
+        EcoResProductMaster         ecoResProductMaster;
+        EcoResFlavor                ecoResFlavor;
+        EcoResProduct               ecoResProduct;
+        EcoResProductMasterFlavor   ecoResProductMasterFlavor;
+
+        ttsbegin;
+
+        while select RecId from ecoResProductMaster
+            where ecoResProductMaster.RetailFlavorGroupId == this.FlavorGroup
+        {
+            // To check whether Flavor is existing or not into table EcoResProductMasterFlavor for particular product.
+            select firstonly RecId from ecoResProduct
+                where ecoResProduct.RecId == ecoResProductMaster.RecId
+                 join forupdate ecoResProductMasterFlavor
+                    where ecoResProductMasterFlavor.FlavorProductMaster == ecoResProduct.RecId
+                 join Name, RecId from ecoResFlavor
+                    where ecoResFlavor.RecId == ecoResProductMasterFlavor.Flavor
+                    &&    ecoResFlavor.Name  == this.Flavor;
+            if (ecoResProductMasterFlavor.RecId)
+            {
+                ecoResProductMasterFlavor.RetailWeight = this.Weight;
+                ecoResProductMasterFlavor.RetailDisplayOrder = this.DisplayOrder;
+
+                ecoResProductMasterFlavor.update();
+            }
+            else
+            {
+                // to check whether flavor exist.
+                select firstonly Name from ecoResFlavor
+                    where ecoResFlavor.Name == this.Flavor;
+                if (ecoResFlavor)
+                {
+                    ecoResProductMasterFlavor.clear();
+                    ecoResProductMasterFlavor.FlavorProductDimensionAttribute = EcoResProductDimensionAttribute::inventDimFieldId2DimensionAttributeRecId(InventDim::fieldIdFlavor());
+                    ecoResProductMasterFlavor.Flavor                  = ecoResFlavor.RecId;
+                    ecoResProductMasterFlavor.FlavorProductMaster     = ecoResProductMaster.RecId;//this.RecId;
+                    ecoResProductMasterFlavor.RetailWeight            = this.Weight;
+                    ecoResProductMasterFlavor.RetailDisplayOrder      = this.DisplayOrder;
+                    ecoResProductMasterFlavor.insert(); // Insert the records into ECOResProductMasterFlavor
+                }
+            }
+        }
+
+        ttscommit;
+
+        return true;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>renamePrimaryKey</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Calls the <c>errorOnRename</c> method of the <c>RetailConnActionManagement</c> class.
+    /// </summary>
+    /// <remarks>
+    /// An error is thrown when you rename the record if the distribution type is other than
+    /// <c>NoDistribution</c>.
+    /// </remarks>
+    public void renamePrimaryKey()
+    {
+        RetailConnActionManagement::errorOnRename(this);
+
+        super();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>validateField</Name>
+				<Source><![CDATA[
+    public boolean validateField(FieldId _fieldIdToCheck)
+    {
+        boolean ret;
+
+        ret = super(_fieldIdToCheck);
+
+        if (fieldExt2Id(_fieldIdToCheck) == fieldNum(RetailFlavorGroupTrans, NoInBarcode))
+        {
+            ret = ret && this.validateNoInBarcode();
+        }
+
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>validateNoInBarcode</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Validates the number in bar code.
+    /// </summary>
+    /// <returns>
+    /// true if two different flavors have the same bar code number; otherwise, false.
+    /// </returns>
+    boolean validateNoInBarcode()
+    {
+        RetailFlavorGroupTrans flavorGroupTrans;
+
+        if (this.NoInBarcode != '')
+        {
+            select firstonly flavorGroupTrans
+            where   flavorGroupTrans.FlavorGroup == this.FlavorGroup
+            &&      flavorGroupTrans.Flavor != this.Flavor
+            &&      flavorGroupTrans.NoInBarcode == this.NoInBarcode;
+
+            if (flavorGroupTrans)
+            {
+                return checkFailed(strFmt("@ProductFlavor:RetailFlavorGroupTrans_NoInBarcodeValidation_Message", this.Flavor));
+            }
+
+            this.checkFlavorLength();
+        }
+
+        return true;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>deleteInventFlavor</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Deletes the record from the <c>EcoResProductMasterFlavor</c> table for all products using the given flavor group.
+    /// </summary>
+    /// <param name="_flavorGroupId">
+    /// The flavor group ID number.
+    /// </param>
+    /// <param name="_flavorId">
+    /// The flavor ID number.
+    /// </param>
+    /// <returns>
+    /// true if record found; otherwise, false.
+    /// </returns>
+    public static boolean deleteInventFlavor(RetailFlavorGroupId _flavorGroupId, RetailFlavorId _flavorId)
+    {
+        EcoResProductMaster         ecoResProductMaster;
+        EcoResProduct               ecoResProduct;
+        EcoResProductMasterFlavor   ecoResProductMasterFlavor;
+        EcoResFlavor                ecoResFlavor;
+
+        while select RecId from ecoResProductMaster
+            where ecoResProductMaster.RetailFlavorGroupId == _flavorGroupId
+        {
+            select firstonly RecId from ecoResProduct
+                where ecoResProduct.RecId == ecoResProductMaster.RecId
+                 join forupdate ecoResProductMasterFlavor
+                    where ecoResProductMasterFlavor.FlavorProductMaster == ecoResProduct.RecId
+                 join Name, RecId from ecoResFlavor
+                    where ecoResFlavor.RecId == ecoResProductMasterFlavor.Flavor
+                    &&    ecoResFlavor.Name  == _flavorId;
+            if (ecoResProductMasterFlavor.RecId && ecoResProductMasterFlavor.validateDelete())
+            {
+                ecoResProductMasterFlavor.delete();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>find</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Finds the specified record in the <c>RetailFlavorGroupTrans</c> table.
+    /// </summary>
+    /// <param name="_groupId">
+    /// The flavor group ID number of the flavor group lines record to find.
+    /// </param>
+    /// <param name="_flavorId">
+    /// The flavor ID number of the flavor group lines record to find.
+    /// </param>
+    /// <param name="_forUpdate">
+    /// A Boolean value that indicates whether to read the record for update; optional.
+    /// </param>
+    /// <returns>
+    /// A record in the <c>RetailFlavorGroupTrans</c> table; otherwise, an empty record.
+    /// </returns>
+    public static RetailFlavorGroupTrans find(
+        RetailFlavorGroupId _groupId,
+        RetailFlavorId _flavorId,
+        boolean _forUpdate = false)
+    {
+        RetailFlavorGroupTrans flavorGroupTrans;
+
+        if (_groupId && _flavorId)
+        {
+            flavorGroupTrans.selectForUpdate(_forUpdate);
+
+            select firstonly flavorGroupTrans
+                index hint FlavorGroupFlavorIdIdx
+                where   flavorGroupTrans.FlavorGroup == _groupId
+                &&      flavorGroupTrans.Flavor == _flavorId;
+        }
+
+        return flavorGroupTrans;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<DeveloperDocumentation>@ProductFlavor:RetailFlavorGroupTrans_DeveloperDocumentation</DeveloperDocumentation>
+	<Label>@ProductFlavor:RetailFlavorGroupTrans_Label</Label>
+	<TableGroup>Group</TableGroup>
+	<TitleField1>flavorGroup</TitleField1>
+	<TitleField2>flavor</TitleField2>
+	<CacheLookup>Found</CacheLookup>
+	<ClusteredIndex>FlavorGroupFlavorIdIdx</ClusteredIndex>
+	<PrimaryIndex>RecId</PrimaryIndex>
+	<ReplacementKey>FlavorGroupFlavorIdIdx</ReplacementKey>
+	<SaveDataPerCompany>No</SaveDataPerCompany>
+	<DeleteActions />
+	<FieldGroups>
+		<AxTableFieldGroup>
+			<Name>AutoReport</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>flavorGroup</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>flavor</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>weight</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>noInBarcode</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoLookup</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoIdentification</Name>
+			<AutoPopulate>Yes</AutoPopulate>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>flavorGroup</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>flavor</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoSummary</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoBrowse</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>All</Name>
+			<Label>@SYS80094</Label>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>flavorGroup</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>flavor</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>noInBarcode</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>weight</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>DisplayOrder</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>Barcode</Name>
+			<Label>@RET3053</Label>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>noInBarcode</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>Identification</Name>
+			<Label>@RET3040</Label>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>flavorGroup</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>flavor</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>Weight</Name>
+			<Label>@RET3055</Label>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>weight</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+	</FieldGroups>
+	<Fields>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>flavor</Name>
+			<AllowEdit>No</AllowEdit>
+			<ExtendedDataType>RetailFlavorId</ExtendedDataType>
+			<Mandatory>Yes</Mandatory>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>flavorGroup</Name>
+			<AllowEdit>No</AllowEdit>
+			<ExtendedDataType>RetailFlavorGroupId</ExtendedDataType>
+			<Mandatory>Yes</Mandatory>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldReal">
+			<Name>DisplayOrder</Name>
+			<ExtendedDataType>RetailDisplayOrder</ExtendedDataType>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>noInBarcode</Name>
+			<ExtendedDataType>RetailNoInBarcode</ExtendedDataType>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldInt">
+			<Name>weight</Name>
+			<ExtendedDataType>RetailWeight</ExtendedDataType>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>Name</Name>
+			<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+			<ExtendedDataType>RetailShortName</ExtendedDataType>
+			<IsObsolete>Yes</IsObsolete>
+		</AxTableField>
+	</Fields>
+	<FullTextIndexes />
+	<Indexes>
+		<AxTableIndex>
+			<Name>FlavorGroupFlavorIdIdx</Name>
+			<AlternateKey>Yes</AlternateKey>
+			<Fields>
+				<AxTableIndexField>
+					<DataField>flavorGroup</DataField>
+				</AxTableIndexField>
+				<AxTableIndexField>
+					<DataField>flavor</DataField>
+				</AxTableIndexField>
+			</Fields>
+		</AxTableIndex>
+	</Indexes>
+	<Mappings>
+		<AxTableMapping>
+			<MappingTable>RetailDimensionGroupTrans</MappingTable>
+			<Connections>
+				<AxTableMappingConnection>
+					<MapField>Dimension</MapField>
+					<MapFieldTo>flavor</MapFieldTo>
+				</AxTableMappingConnection>
+				<AxTableMappingConnection>
+					<MapField>DimensionGroup</MapField>
+					<MapFieldTo>flavorGroup</MapFieldTo>
+				</AxTableMappingConnection>
+				<AxTableMappingConnection>
+					<MapField>DisplayOrder</MapField>
+					<MapFieldTo>DisplayOrder</MapFieldTo>
+				</AxTableMappingConnection>
+				<AxTableMappingConnection>
+					<MapField>noInBarcode</MapField>
+					<MapFieldTo>noInBarcode</MapFieldTo>
+				</AxTableMappingConnection>
+			</Connections>
+		</AxTableMapping>
+	</Mappings>
+	<Relations>
+		<AxTableRelation>
+			<Name>EcoResFlavor</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<OnDelete>Restricted</OnDelete>
+			<RelatedTable>EcoResFlavor</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelationshipType>Association</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>flavor</Name>
+					<SourceEDT>RetailFlavorId</SourceEDT>
+					<Field>flavor</Field>
+					<RelatedField>Name</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+		</AxTableRelation>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>RetailFlavorGroupTable</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<EDTRelation>Yes</EDTRelation>
+			<RelatedTable>RetailFlavorGroupTable</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelationshipType>Composition</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>flavorGroup</Name>
+					<SourceEDT>RetailFlavorGroupId</SourceEDT>
+					<Field>flavorGroup</Field>
+					<RelatedField>flavorGroup</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>groupIdx</Index>
+		</AxTableRelation>
+	</Relations>
+	<StateMachines />
+</AxTable>

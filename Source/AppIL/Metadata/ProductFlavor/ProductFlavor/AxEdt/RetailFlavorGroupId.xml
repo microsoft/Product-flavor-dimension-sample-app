@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxEdt xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns=""
+	i:type="AxEdtString">
+	<Name>RetailFlavorGroupId</Name>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<Extends>RetailDimensionGroupId</Extends>
+	<Label>@ProductFlavor:RetailFlavorGroupId_Name</Label>
+	<ArrayElements />
+	<Relations>
+		<AxEdtRelation>
+			<RelatedField>flavorGroup</RelatedField>
+			<Table>RetailFlavorGroupTable</Table>
+		</AxEdtRelation>
+	</Relations>
+	<TableReferences />
+</AxEdt>

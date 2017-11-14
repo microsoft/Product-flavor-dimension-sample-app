@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductMasterFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>EcoResProductMasterFlavor_Extension</c> class extends the <c>EcoResProductMaster</c> table in order to add new flavor dimension functionality.
+/// </summary>
+[ExtensionOf(tablestr(EcoResProductMaster))]
+final public class EcoResProductMasterFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>validateFlavorGroup</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///     Inserts the records into <c>EcoResProductMasterFlavor</c> table.
+    /// </summary>
+    /// <param name="_suppressDialog">
+    /// A boolean value indicating whether dialogs should be suppressed.
+    /// </param>
+    /// <returns>
+    ///     true if user wants to change item's flavor to the flavors of the new group and the specified group exists (or is empty), else false.
+    /// </returns>
+    /// <remarks>
+    ///     This method is used to validate flavor group on the product master details form
+    ///     and inserts the records into <c>EcoResProductMasterFlavor</c> table if it does not exist.
+    /// </remarks>
+    boolean validateFlavorGroup(boolean _suppressDialog = false)
+    {
+        EcoResProductMasterFlavor ecoResProductMasterFlavor;
+
+        #Retail
+
+        if (this.groupNameIsValid(fieldNum(EcoResProductMaster, RetailFlavorGroupId)) && !this.isReleased())
+        {
+            if (!_suppressDialog)
+            {
+                select firstOnly RecId from ecoResProductMasterFlavor
+                    where ecoResProductMasterFlavor.flavorProductMaster == this.RecId;
+
+                if (ecoResProductMasterFlavor.RecId)
+                {
+                    if (Box::yesNo("@ProductFlavor:EcoResProductMaster_ChangeFlavorGroup_Message" + #CharNewLine
+                                 + "@ProductFlavor:EcoResProductMaster_ChangeFlavorGroup_Confirmation", DialogButton::Yes, "@RET3951", "@productFlavor:EcoResProductMaster_ChangeFlavorGroup_Title") == DialogButton::No)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        return checkFailed(strFmt("@SYS78966", fieldPname(EcoResProductMaster, RetailFlavorGroupId)));
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>applyFlavorGroup</Name>
+				<Source><![CDATA[
+    private void applyFlavorGroup()
+    {
+        RetailFlavorGroupTrans                  flavorGroupTrans;
+        EcoResFlavor                            ecoResFlavor;
+        EcoResProductMasterFlavor               ecoResProductMasterFlavor;
+        EcoResDistinctProductVariant            ecoResDistinctProductVariant;
+        RetailFlavorGroupTransTranslation       retailFlavorGroupTransTranslation;
+
+        ttsbegin;
+
+        // Delete all the flavor names first before reassigning a new flavor group on the product master details form.
+        delete_from ecoResDistinctProductVariant
+                where ecoResDistinctProductVariant.ProductMaster == this.RecId;
+        delete_from ecoResProductMasterFlavor
+                where ecoResProductMasterFlavor.FlavorProductMaster == this.RecId;
+
+        while select Weight, DisplayOrder, Flavor, RecId, flavorGroup from flavorGroupTrans
+                where flavorGroupTrans.FlavorGroup == this.RetailFlavorGroupId
+        {
+            // To check whether Flavor is existing or not into table ecoResProductMasterFlavor for particular product.
+            select firstonly Flavor, RecId, flavorProductMaster from ecoResProductMasterFlavor
+                    where ecoResProductMasterFlavor.flavorProductMaster == this.RecId
+                    join Name, RecId from ecoResFlavor
+                        where ecoResFlavor.RecId == ecoResProductMasterFlavor.Flavor
+                        &&    ecoResFlavor.Name  == flavorGroupTrans.Flavor;
+
+            if (!ecoResProductMasterFlavor.RecId)
+            {
+                select firstonly Name, RecId from ecoResFlavor
+                        where ecoResFlavor.Name == flavorGroupTrans.Flavor;
+                if (ecoResFlavor)
+                {
+                    ecoResProductMasterFlavor.clear();
+                    ecoResProductMasterFlavor.FlavorProductDimensionAttribute = EcoResProductDimensionAttribute::inventDimFieldId2DimensionAttributeRecId(InventDim::fieldIdFlavor());
+                    ecoResProductMasterFlavor.Flavor                          = ecoResFlavor.RecId;
+                    ecoResProductMasterFlavor.FlavorProductMaster             = this.RecId;
+                    ecoResProductMasterFlavor.RetailWeight                   = flavorGroupTrans.weight;
+                    ecoResProductMasterFlavor.RetailDisplayOrder             = flavorGroupTrans.DisplayOrder;
+                    ecoResProductMasterFlavor.insert(); // Insert the records into ecoResProductMasterFlavor
+
+                    while select retailFlavorGroupTransTranslation
+                            where retailFlavorGroupTransTranslation.RetailFlavorGroupTrans == flavorGroupTrans.RecId
+                    {
+                        EcoResGroupDimValTranslationsHelper::insertDimensionValueTranslation(retailFlavorGroupTransTranslation.Name,
+                                                                                                 retailFlavorGroupTransTranslation.Description,
+                                                                                                 retailFlavorGroupTransTranslation.LanguageId,
+                                                                                                 ecoResProductMasterFlavor.RecId);
+                    }
+                }
+            }
+        }
+
+        ttscommit;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>getVariantGroup</Name>
+				<Source><![CDATA[
+    protected RetailDimensionGroupTable getVariantGroup(FieldId _groupNameField)
+    {
+        var dimensionGroupTable = next getVariantGroup(_groupNameField);
+
+        RetailFlavorGroupTable retailFlavorGroupTable;
+        
+        return _groupNameField == fieldNum(EcoResProductMaster, RetailFlavorGroupId)
+            ? retailFlavorGroupTable
+            : dimensionGroupTable;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>validateField</Name>
+				<Source><![CDATA[
+    public boolean validateField(fieldId _fieldIdToCheck)
+    {
+        boolean ret = next validateField(_fieldIdToCheck);
+
+        if (ret && _fieldIdToCheck == fieldNum(EcoResProductMaster, RetailFlavorGroupId))
+        {
+            ret = this.validateFlavorGroup(!FormDataUtil::isFormDataSource(this));
+        }
+
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>applySelectedDimensionGroups</Name>
+				<Source><![CDATA[
+    protected void applySelectedDimensionGroups(EcoResProductMaster _originalProductMaster)
+    {
+        next applySelectedDimensionGroups(_originalProductMaster);
+
+        if (!_originalProductMaster && this.RetailFlavorGroupId
+            || _originalProductMaster.RetailFlavorGroupId != this.RetailFlavorGroupId)
+        {
+            this.applyFlavorGroup();
+        }
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

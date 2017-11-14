@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTableExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventTable.Extension</Name>
+	<FieldGroupExtensions>
+		<AxTableFieldGroupExtension>
+			<Name>DefaultProductDimensions</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>StandardInventFlavorId</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroupExtension>
+		<AxTableFieldGroupExtension>
+			<Name>AllFields</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>AltInventFlavorId</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroupExtension>
+		<AxTableFieldGroupExtension>
+			<Name>AlternativeProduct</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>AltInventFlavorId</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroupExtension>
+		<AxTableFieldGroupExtension>
+			<Name>ItemAlternative</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>AltInventFlavorId</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroupExtension>
+	</FieldGroupExtensions>
+	<FieldGroups />
+	<FieldModifications />
+	<Fields>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>StandardInventFlavorId</Name>
+			<ExtendedDataType>EcoResFlavorName</ExtendedDataType>
+			<GroupPrompt>@ProductFlavor:InventTable_GroupPrompt</GroupPrompt>
+			<Label>@ProductFlavor:InventTable_StandardInventFlavorId_Label</Label>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>AltInventFlavorId</Name>
+			<ExtendedDataType>EcoResFlavorName</ExtendedDataType>
+			<GroupPrompt>@ProductFlavor:InventTable_GroupPrompt</GroupPrompt>
+			<Label>@ProductFlavor:InventTable_AltInventFlavorId_Label</Label>
+		</AxTableField>
+	</Fields>
+	<Indexes />
+	<Mappings />
+	<PropertyModifications />
+	<Relations>
+		<AxTableRelation>
+			<Name>StandardEcoResFlavor</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<RelatedTable>EcoResFlavor</RelatedTable>
+			<RelatedTableCardinality>ZeroOne</RelatedTableCardinality>
+			<RelatedTableRole>StandardEcoResFlavor</RelatedTableRole>
+			<RelationshipType>Association</RelationshipType>
+			<Role>InventTable</Role>
+			<UseDefaultRoleNames>No</UseDefaultRoleNames>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>StandardInventFlavorId</Name>
+					<Field>StandardInventFlavorId</Field>
+					<RelatedField>Name</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+		</AxTableRelation>
+		<AxTableRelation>
+			<Name>AltEcoResFlavor</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<RelatedTable>EcoResFlavor</RelatedTable>
+			<RelatedTableCardinality>ZeroOne</RelatedTableCardinality>
+			<RelatedTableRole>AltEcoResFlavor</RelatedTableRole>
+			<RelationshipType>Association</RelationshipType>
+			<Role>InventTable</Role>
+			<UseDefaultRoleNames>No</UseDefaultRoleNames>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>AltInventFlavorId</Name>
+					<Field>AltInventFlavorId</Field>
+					<RelatedField>Name</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+		</AxTableRelation>
+	</Relations>
+</AxTableExtension>

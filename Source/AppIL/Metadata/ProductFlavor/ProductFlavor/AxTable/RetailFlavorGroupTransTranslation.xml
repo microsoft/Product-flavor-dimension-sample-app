@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTable xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>RetailFlavorGroupTransTranslation</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+public class RetailFlavorGroupTransTranslation extends common
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>insert</Name>
+				<Source><![CDATA[
+        public void insert()
+    {
+        this.syncProductLevelTranslations();
+        super();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>syncProductLevelTranslations</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Creates the corresponding product master dimension value translations
+    /// for products in the group if there's an actual change.
+    /// </summary>
+    public void syncProductLevelTranslations()
+    {
+        EcoResProductMaster         ecoResProductMaster;
+        RetailFlavorGroupTrans      retailFlavorGroupLine;
+        RetailFlavorGroupTable      retailFlavorGroupTable;
+        EcoResFlavor                ecoResFlavor;
+        EcoResProductMasterFlavor   ecoResProductMasterFlavor;
+
+        while select RecId, Flavor, FlavorProductMaster from ecoResProductMasterFlavor
+            join RecId from EcoResFlavor
+                where EcoResFlavor.RecId == ecoResProductMasterFlavor.Flavor
+            join RecId, RetailFlavorGroupId from ecoResProductMaster
+                where ecoResProductMaster.RecId == ecoResProductMasterFlavor.FlavorProductMaster
+            join flavorGroup from retailFlavorGroupTable
+                where retailFlavorGroupTable.flavorGroup == ecoResProductMaster.RetailFlavorGroupId
+            join RecId, flavor, flavorGroup from retailFlavorGroupLine
+                where retailFlavorGroupLine.flavorGroup == retailFlavorGroupTable.flavorGroup
+                && retailFlavorGroupLine.flavor == ecoResFlavor.Name
+                && retailFlavorGroupLine.RecId == this.RetailFlavorGroupTrans
+        {
+            EcoResGroupDimValTranslationsHelper::syncProductLevelTranslation(this.Name,
+                                                                             this.Description,
+                                                                             this.LanguageId,
+                                                                             ecoResProductMasterFlavor.RecId);
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>update</Name>
+				<Source><![CDATA[
+        public void update()
+    {
+        this.syncProductLevelTranslations();
+        super();
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<DeveloperDocumentation>@ProductFlavor:RetailFlavorGroupTransTranslation_DeveloperDocumentation</DeveloperDocumentation>
+	<FormRef>RetailFlavorGroupTable</FormRef>
+	<Label>@ProductFlavor:RetailFlavorGroupTransTranslation_Label</Label>
+	<TitleField1>RetailFlavorGroupTrans</TitleField1>
+	<TitleField2>LanguageId</TitleField2>
+	<CacheLookup>Found</CacheLookup>
+	<SaveDataPerCompany>No</SaveDataPerCompany>
+	<DeleteActions />
+	<FieldGroups>
+		<AxTableFieldGroup>
+			<Name>AutoReport</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Name</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>LanguageId</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoLookup</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Name</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>LanguageId</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoIdentification</Name>
+			<AutoPopulate>Yes</AutoPopulate>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoSummary</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoBrowse</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>All</Name>
+			<Label>@SYS80094</Label>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Description</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>LanguageId</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>Name</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>RetailFlavorGroupTrans</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+	</FieldGroups>
+	<Fields>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>Description</Name>
+			<ExtendedDataType>RetailFlavorGroupTransDescription</ExtendedDataType>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>LanguageId</Name>
+			<ExtendedDataType>LanguageIdAll</ExtendedDataType>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>Name</Name>
+			<ExtendedDataType>RetailFlavorGroupTransName</ExtendedDataType>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldInt64">
+			<Name>RetailFlavorGroupTrans</Name>
+			<ExtendedDataType>RefRecId</ExtendedDataType>
+		</AxTableField>
+	</Fields>
+	<FullTextIndexes />
+	<Indexes>
+		<AxTableIndex>
+			<Name>RetailFlavorGroupTransIdx</Name>
+			<AllowDuplicates>Yes</AllowDuplicates>
+			<Fields>
+				<AxTableIndexField>
+					<DataField>RetailFlavorGroupTrans</DataField>
+				</AxTableIndexField>
+				<AxTableIndexField>
+					<DataField>LanguageId</DataField>
+				</AxTableIndexField>
+			</Fields>
+		</AxTableIndex>
+	</Indexes>
+	<Mappings>
+		<AxTableMapping>
+			<MappingTable>RetailDimensionGroupTransTranslation</MappingTable>
+			<Connections>
+				<AxTableMappingConnection>
+					<MapField>RetailDimensionGroupTrans</MapField>
+					<MapFieldTo>RetailFlavorGroupTrans</MapFieldTo>
+				</AxTableMappingConnection>
+			</Connections>
+		</AxTableMapping>
+	</Mappings>
+	<Relations>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>LanguageTable</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<OnDelete>Cascade</OnDelete>
+			<RelatedTable>LanguageTable</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelationshipType>Association</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>LanguageId</Name>
+					<Field>LanguageId</Field>
+					<RelatedField>LanguageId</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>Key</Index>
+		</AxTableRelation>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>RetailFlavorGroupTrans</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<OnDelete>Cascade</OnDelete>
+			<RelatedTable>RetailFlavorGroupTrans</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelationshipType>Composition</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>RetailFlavorGroupTrans</Name>
+					<Field>RetailFlavorGroupTrans</Field>
+					<RelatedField>RecId</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>RecId</Index>
+		</AxTableRelation>
+	</Relations>
+	<StateMachines />
+</AxTable>

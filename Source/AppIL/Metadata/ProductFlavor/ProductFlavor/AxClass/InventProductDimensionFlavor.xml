@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventProductDimensionFlavor</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>InventProductDimensionFlavor</c> class defines the behavior of the flavor inventory dimension.
+/// </summary>
+class InventProductDimensionFlavor extends InventProductDimension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>isActiveForItem</Name>
+				<Source><![CDATA[
+    public boolean isActiveForItem(InventTable _inventTable)
+    {
+        return EcoResProductDimGroupSetup::newItemId(_inventTable.ItemId).getFieldSetup(InventDim::fieldIdFlavor()).isActive();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmDefaultValueForItem</Name>
+				<Source><![CDATA[
+    public anytype parmDefaultValueForItem(InventTable _inventTable, anytype _value = _inventTable.StandardInventFlavorId)
+    {
+        _inventTable.StandardInventFlavorId = _value;
+        return _inventTable.StandardInventFlavorId;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmAlternativeValueForItem</Name>
+				<Source><![CDATA[
+    public anytype parmAlternativeValueForItem(InventTable _inventTable, anytype _value = _inventTable.AltInventFlavorId)
+    {
+        _inventTable.AltInventFlavorId = _value;
+        return _inventTable.AltInventFlavorId;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>findDimensionByNaturalKey</Name>
+				<Source><![CDATA[
+    public Common findDimensionByNaturalKey(anytype _value)
+    {
+        return EcoResFlavor::findByName(_value);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>retrieveDimensionNaturalKey</Name>
+				<Source><![CDATA[
+    public anytype retrieveDimensionNaturalKey(RecId _id)
+    {
+        return EcoResFlavor::find(_id).Name;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>retrieveDimensionNaturalKeyByProductId</Name>
+				<Source><![CDATA[
+    public anytype retrieveDimensionNaturalKeyByProductId(RecId _productRecId)
+    {
+        EcoResFlavor ecoResFlavor;
+        EcoResProductVariantFlavor ecoResProductVariantFlavor;
+
+        RefRecId productDimensionAttribute   = EcoResProductDimensionAttribute::inventDimFieldId2DimensionAttributeRecId(this.parmInventDimFieldId());
+
+        select firstonly Name
+            from         ecoResFlavor
+            exists join  ecoResProductVariantFlavor
+                where    ecoResProductVariantFlavor.Flavor                         == ecoResFlavor.RecId
+                    &&   ecoResProductVariantFlavor.ProductDimensionAttribute      == productDimensionAttribute
+                    &&   ecoResProductVariantFlavor.DistinctProductVariant         == _productRecId;
+
+        return ecoResFlavor.Name;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>findTranslationByProduct</Name>
+				<Source><![CDATA[
+    public EcoResProductMasterDimValueTranslation findTranslationByProduct(EcoResProductRecId _productMasterRecId, anytype _dimensionValue, SystemLanguageId _languageId)
+    {
+        return EcoResProductMasterFlavor::findTranslationByProduct(_productMasterRecId, _dimensionValue, _languageId);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>isRetailSupported</Name>
+				<Source><![CDATA[
+    public boolean isRetailSupported()
+    {
+        return true;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>getInstance</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Returns the singleton instance of the <c>InventProductDimensionFlavor</c> class.
+    /// </summary>
+    /// <returns>An instance of the <c>InventProductDimensionFlavor</c> class.</returns>
+    public static InventProductDimensionFlavor getInstance()
+    {
+        return InventDimension::singletonFromInventDimFieldId(InventDim::fieldIdFlavor()) as InventProductDimensionFlavor;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

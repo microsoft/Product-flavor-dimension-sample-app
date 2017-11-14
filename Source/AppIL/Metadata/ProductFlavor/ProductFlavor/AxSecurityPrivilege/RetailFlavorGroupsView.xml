@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxSecurityPrivilege xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>RetailFlavorGroupsView</Name>
+	<Description>@ProductFlavor:RetailFlavorGroupsView_Label</Description>
+	<Label>@ProductFlavor:RetailFlavorGroupsView_Label</Label>
+	<DataEntityPermissions />
+	<DirectAccessPermissions />
+	<EntryPoints>
+		<AxSecurityEntryPointReference>
+			<Name>RetailFlavorGroupTable</Name>
+			<Grant>
+				<Read>Allow</Read>
+			</Grant>
+			<ObjectName>RetailFlavorGroupTable</ObjectName>
+			<ObjectType>MenuItemDisplay</ObjectType>
+			<Forms>
+				<AxSecurityEntryPointReferenceForm>
+					<Name>RetailFlavorGroupTable</Name>
+					<Controls />
+					<DataSources />
+				</AxSecurityEntryPointReferenceForm>
+			</Forms>
+		</AxSecurityEntryPointReference>
+	</EntryPoints>
+	<FormControlOverrides />
+</AxSecurityPrivilege>

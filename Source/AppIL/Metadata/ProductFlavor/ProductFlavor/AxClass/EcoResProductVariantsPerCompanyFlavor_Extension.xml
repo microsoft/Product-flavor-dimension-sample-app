@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductVariantsPerCompanyFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>EcoResProductVariantsPerCompanyFlavor_Extension</c> class extends the <c>EcoResProductVariantsPerCompany</c> form and adds flavor product dimension functionality.
+/// </summary>
+[ExtensionOf(formStr(EcoResProductVariantsPerCompany))]
+final public class EcoResProductVariantsPerCompanyFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>ecoResProductVariantFlavorDisplayOrderView_ValidatingWrite</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on Initialized event of the <c>EcoResProductVariantFlavorDisplayOrderView</c> form data source and adjusts data source query.
+    /// </summary>
+    /// <param name = "_sender">The data source object that triggers the event.</param>
+    /// <param name = "_e">Event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavorDisplayOrderView), FormDataSourceEventType::Initialized)]
+    public void ecoResProductVariantFlavorDisplayOrderView_ValidatingWrite(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {
+        if (isConfigurationkeyEnabled(configurationKeyNum(Retail)))
+        {
+            _sender.queryBuildDataSource().addLink(fieldNum(EcoResProductVariantFlavor, DistinctProductVariant), fieldNum(EcoResProductVariantFlavorDisplayOrderView, DistinctProductVariant));
+            _sender.queryBuildDataSource().addLink(fieldNum(EcoResProductVariantFlavor, Flavor), fieldNum(EcoResProductVariantFlavorDisplayOrderView, Flavor));
+
+            _sender.queryBuildDataSource().addOrderByField(fieldNum(EcoResProductVariantFlavorDisplayOrderView, RetailDisplayOrder));
+            _sender.queryBuildDataSource().addOrderByField(fieldNum(EcoResProductVariantFlavorDisplayOrderView, Name));
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>ecoResProductVariantFlavorDisplayOrderView_InitValue</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on InitValue event of the <c>EcoResProductVariantFlavor</c> form data source and updates properties of the current record.
+    /// </summary>
+    /// <param name = "_sender">The data source object that triggers the event.</param>
+    /// <param name = "_e">Event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor), FormDataSourceEventType::InitValue)]
+    public void ecoResProductVariantFlavorDisplayOrderView_InitValue(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {
+        if (this.productVariantsFormHelper().isDimensionDatasourceActive(_sender))
+        {
+            EcoResProductVariantFlavor ecoResProductVariantFlavor = _sender.cursor();
+            ecoResProductVariantFlavor.ProductDimensionAttribute  = EcoResProductDimensionAttribute::inventDimFieldId2DimensionAttributeRecId(InventDim::fieldIdFlavor());
+            ecoResProductVariantFlavor.DistinctProductVariant     = this.parmProductVariant();
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>ecoResProductVariantFlavor_ValidatingWrite</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on ValidatingWrite event of the <c>EcoResProductVariantFlavor</c> form data source and cancels the validation in case the dimension data source is not active.
+    /// </summary>
+    /// <param name = "_sender">The data source object that triggers the event.</param>
+    /// <param name = "_e">Event arguments.</param>
+    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor), FormDataSourceEventType::ValidatingWrite)]
+    public void ecoResProductVariantFlavor_ValidatingWrite(FormDataSource _sender, FormDataSourceEventArgs _e)
+    {
+        FormDataSourceCancelEventArgs cancelable = _e as FormDataSourceCancelEventArgs;
+
+        if (!this.productVariantsFormHelper().isDimensionDatasourceActive(_sender)
+            && cancelable)
+        {
+            cancelable.cancel(true);
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>EcoResProductVariants_Initialized</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Hooks on Initialized event of the <c>EcoResProductVariants</c> form and registers standard methods overrides.
+    /// </summary>
+    /// <param name = "_sender">The form object that triggers the event.</param>
+    /// <param name = "_e">Event arguments.</param>
+    [FormEventHandler(formStr(EcoResProductVariantsPerCompany), FormEventType::Initialized)]
+    public static void EcoResProductVariants_Initialized(xFormRun _sender, FormEventArgs _e)
+    {
+        FormRun formRun = _sender as FormRun;
+        FormDataSource productVariantFlavorDataSource = formRun.dataSource(formDataSourceStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor));
+
+        if (!productVariantFlavorDataSource)
+        {
+            // most likely form extension is disabled by configuration key.
+            return;
+        }
+
+        FormReferenceObject fieldObject = productVariantFlavorDataSource.object(fieldNum(EcoResProductVariantFlavor, Flavor));
+
+        fieldObject.registerOverrideMethod(
+            methodStr(FormDataObject, jumpref),
+            formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_JumpRef),
+            formRun);
+
+        fieldObject.registerOverrideMethod(
+            methodStr(FormDataObject, modified),
+            formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_Modified),
+            formRun);
+
+        fieldObject.registerOverrideMethod(
+            methodStr(FormReferenceObject, resolveReference),
+            formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_ResolveReference),
+            formRun);
+
+        fieldObject.registerOverrideMethod(
+            methodStr(FormReferenceObject, lookupReference),
+            formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_LookupReference),
+            formRun);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>EcoResProductVariantFlavor_Flavor_JumpRef</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Handles JumpRef event for the <c>EcoResProductVariantFlavor</c> form data source.
+    /// </summary>
+    /// <param name = "_formDataObject">A form data object that represents the object which triggers the event.</param>
+    public void EcoResProductVariantFlavor_Flavor_JumpRef(FormDataObject _formDataObject)
+    {
+        this.productVariantsFormHelper().handleProductDimensionJumpRef(
+            ecoResProductVariantFlavor.ProductDimensionAttribute);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>EcoResProductVariantFlavor_Flavor_Modified</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Updates the retail weight property when <c>EcoResProductVariantFlavor</c> form data source modified event is fired.
+    /// </summary>
+    /// <param name = "_formDataObject">A form data object that represents the object which triggers the event.</param>
+    public void EcoResProductVariantFlavor_Flavor_Modified(FormDataObject _formDataObject)
+    {
+        this.setNameAndProductNumberFromNomenclature();
+
+        if (isConfigurationkeyEnabled(configurationKeyNum(Retail)))
+        {
+            EcoResProductMasterFlavor ecoResProductMasterFlavor;
+
+            select firstonly RetailWeight from ecoResProductMasterFlavor
+                where ecoResProductMasterFlavor.Flavor == ecoResProductVariantFlavor.Flavor &&
+                        ecoResProductMasterFlavor.FlavorProductMaster == ecoResDistinctProductVariant.ProductMaster;
+
+            ecoResProductVariantFlavor.RetailWeight = ecoResProductMasterFlavor.RetailWeight;
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>EcoResProductVariantFlavor_Flavor_ResolveReference</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Resolves flavor dimension reference.
+    /// </summary>
+    /// <param name = "_formReferenceControl">A flavor form reference control.</param>
+    /// <returns>A flavor record.</returns>
+    public Common EcoResProductVariantFlavor_Flavor_ResolveReference(FormReferenceControl _formReferenceControl)
+    {
+        EcoResFlavorName flavorName = _formReferenceControl.filterValue(AbsoluteFieldBinding::construct(fieldStr(EcoResFlavor, Name), tableStr(EcoResFlavor))).value();
+
+        return EcoResFlavor::resolveProductVariantFlavor(flavorName,
+            this.productVariantsFormHelper().parmEcoResProductMaster().RecId,
+            ecoResProductVariantFlavor.ProductDimensionAttribute);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>EcoResProductVariantFlavor_Flavor_LookupReference</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Performs flavor dimension reference lookup.
+    /// </summary>
+    /// <param name = "_formReferenceControl">A flavor form reference control.</param>
+    /// <returns>A flavor record.</returns>
+    public Common EcoResProductVariantFlavor_Flavor_LookupReference(FormReferenceControl _formReferenceControl)
+    {
+        Common ret = EcoResFlavor::lookupProductVariantFlavor(_formReferenceControl,
+            this.productVariantsFormHelper().parmEcoResProductMaster().RecId,
+            ecoResProductVariantFlavor.ProductDimensionAttribute);
+
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>initInventDimensionMetadataEntries</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Extends the original class method in order to add metadata for the new dimension.
+    /// </summary>
+    protected void initInventDimensionMetadataEntries()
+    {
+        next initInventDimensionMetadataEntries();
+
+        this.productVariantsFormHelper().addInventDimensionMetadata(
+            InventDim::fieldIdFlavor(),
+            fieldNum(EcoResProductVariantFlavor, Flavor));
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

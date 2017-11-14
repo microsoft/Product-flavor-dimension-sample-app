@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxView xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductVariantFlavorDisplayOrderView</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+public class EcoResProductVariantFlavorDisplayOrderView extends common
+{
+}
+
+]]></Declaration>
+		<Methods />
+	</SourceCode>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<DeveloperDocumentation>@ProductFlavor:EcoResProductVariantFlavorDisplayOrderView_DeveloperDocumentation</DeveloperDocumentation>
+	<Label>@ProductFlavor:EcoResProductVariantFlavorDisplayOrderView_Label</Label>
+	<FieldGroups>
+		<AxTableFieldGroup>
+			<Name>AutoReport</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoLookup</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoIdentification</Name>
+			<AutoPopulate>Yes</AutoPopulate>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoSummary</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoBrowse</Name>
+			<Fields />
+		</AxTableFieldGroup>
+	</FieldGroups>
+	<Fields>
+		<AxViewField xmlns=""
+			i:type="AxViewFieldBound">
+			<Name>DistinctProductVariant</Name>
+			<DataField>DistinctProductVariant</DataField>
+			<DataSource>EcoResProductVariantFlavor</DataSource>
+		</AxViewField>
+		<AxViewField xmlns=""
+			i:type="AxViewFieldBound">
+			<Name>Flavor</Name>
+			<DataField>Flavor</DataField>
+			<DataSource>EcoResProductVariantFlavor</DataSource>
+		</AxViewField>
+		<AxViewField xmlns=""
+			i:type="AxViewFieldBound">
+			<Name>RetailDisplayOrder</Name>
+			<Label>@ProductFlavor:EcoResProductVariantFlavorDisplayOrderView_RetailDisplayOrder_Label</Label>
+			<DataField>RetailDisplayOrder</DataField>
+			<DataSource>EcoResProductMasterFlavor</DataSource>
+		</AxViewField>
+		<AxViewField xmlns=""
+			i:type="AxViewFieldBound">
+			<Name>ProductMaster</Name>
+			<DataField>ProductMaster</DataField>
+			<DataSource>EcoResDistinctProductVariant</DataSource>
+		</AxViewField>
+		<AxViewField xmlns=""
+			i:type="AxViewFieldBound">
+			<Name>Name</Name>
+			<Label>@ProductFlavor:EcoResProductVariantFlavorDisplayOrderView_NameColumn</Label>
+			<DataField>Name</DataField>
+			<DataSource>EcoResFlavor</DataSource>
+		</AxViewField>
+	</Fields>
+	<Indexes />
+	<Mappings />
+	<Relations />
+	<StateMachines />
+	<ViewMetadata>
+		<Name>Metadata</Name>
+		<SourceCode>
+			<Methods />
+		</SourceCode>
+		<DataSources>
+			<AxQuerySimpleRootDataSource>
+				<Name>EcoResProductVariantFlavor</Name>
+				<DynamicFields>Yes</DynamicFields>
+				<Table>EcoResProductVariantFlavor</Table>
+				<DataSources>
+					<AxQuerySimpleEmbeddedDataSource>
+						<Name>EcoResDistinctProductVariant</Name>
+						<DynamicFields>Yes</DynamicFields>
+						<Table>EcoResDistinctProductVariant</Table>
+						<DataSources>
+							<AxQuerySimpleEmbeddedDataSource>
+								<Name>EcoResProductMasterFlavor</Name>
+								<DynamicFields>Yes</DynamicFields>
+								<Table>EcoResProductMasterFlavor</Table>
+								<DataSources />
+								<DerivedDataSources />
+								<Fields />
+								<Ranges />
+								<Relations>
+									<AxQuerySimpleDataSourceRelation>
+										<Name>QueryDataSourceRelation1</Name>
+										<Field>ProductMaster</Field>
+										<JoinDataSource>EcoResDistinctProductVariant</JoinDataSource>
+										<RelatedField>FlavorProductMaster</RelatedField>
+									</AxQuerySimpleDataSourceRelation>
+									<AxQuerySimpleDataSourceRelation>
+										<Name>QueryDataSourceRelation2</Name>
+										<Field>Flavor</Field>
+										<JoinDataSource>EcoResProductVariantFlavor</JoinDataSource>
+										<RelatedField>Flavor</RelatedField>
+									</AxQuerySimpleDataSourceRelation>
+								</Relations>
+							</AxQuerySimpleEmbeddedDataSource>
+						</DataSources>
+						<DerivedDataSources />
+						<Fields />
+						<Ranges />
+						<Relations>
+							<AxQuerySimpleDataSourceRelation>
+								<Name>QueryDataSourceRelation1</Name>
+								<Field>DistinctProductVariant</Field>
+								<JoinDataSource>EcoResProductVariantFlavor</JoinDataSource>
+								<RelatedField>RecId</RelatedField>
+							</AxQuerySimpleDataSourceRelation>
+						</Relations>
+					</AxQuerySimpleEmbeddedDataSource>
+					<AxQuerySimpleEmbeddedDataSource>
+						<Name>EcoResFlavor</Name>
+						<DynamicFields>Yes</DynamicFields>
+						<Table>EcoResFlavor</Table>
+						<DataSources />
+						<DerivedDataSources />
+						<Fields />
+						<Ranges />
+						<Relations>
+							<AxQuerySimpleDataSourceRelation>
+								<Name>QueryDataSourceRelation1</Name>
+								<Field>Flavor</Field>
+								<JoinDataSource>EcoResProductVariantFlavor</JoinDataSource>
+								<RelatedField>RecId</RelatedField>
+							</AxQuerySimpleDataSourceRelation>
+						</Relations>
+					</AxQuerySimpleEmbeddedDataSource>
+				</DataSources>
+				<DerivedDataSources />
+				<Fields />
+				<Ranges />
+				<GroupBy />
+				<Having />
+				<OrderBy />
+			</AxQuerySimpleRootDataSource>
+		</DataSources>
+	</ViewMetadata>
+</AxView>

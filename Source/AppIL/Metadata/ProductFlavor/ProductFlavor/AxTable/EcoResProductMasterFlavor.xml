@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTable xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductMasterFlavor</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+public class EcoResProductMasterFlavor extends EcoResProductMasterDimensionValue
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>hasDimensionValueForProductMaster</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Checks whether any dimension value record has been created for the specified product master and
+    /// dimension attribute.
+    /// </summary>
+    /// <param name="_productMaster">
+    /// The <c>EcoResProductRecId</c> reference to the product master.
+    /// </param>
+    /// <returns>
+    /// true if a product dimension table value exists for the specified product; otherwise, false.
+    /// </returns>
+    public boolean hasDimensionValueForProductMaster(EcoResProductRecId _productMaster)
+    {
+        EcoResProductMasterFlavor    ecoResProductMasterFlavor;
+
+        select firstonly RecId from ecoResProductMasterFlavor
+            where ecoResProductMasterFlavor.FlavorProductMaster == _productMaster;
+
+        if (ecoResProductMasterFlavor.RecId)
+        {
+            return true;
+        }
+        return false;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>insert</Name>
+				<Source><![CDATA[
+    public void insert()
+    {
+        ttsBegin;
+
+        super();
+
+        this.createVariantsFromDimensionValue(this.FlavorProductMaster, this.FlavorProductDimensionAttribute, this.Flavor);
+
+        ttsCommit;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>lookupProductMasterDimensionValue</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Find the dimension value record that was created for a specified product master and
+    /// dimension attribute value.
+    /// </summary>
+    /// <param name="_productMaster">
+    /// The <c>EcoResProductRecId</c> reference to the product master.
+    /// </param>
+    /// <param name="_productDimensionAttribute">
+    ///    An ID of the <c>EcoResProductDimensionAttribute</c> table buffer.
+    /// </param>
+    /// <param name="_flavorRecId">
+    /// The reference to the product dimension value.
+    /// </param>
+    /// <returns>
+    /// The product dimension table value for the specified product and dimension value.
+    /// </returns>
+    public EcoResProductMasterDimensionValueId lookupProductMasterDimensionValue(
+        EcoResProductRecId  _productMaster,
+        RefRecId            _productDimensionAttribute,
+        RefRecId            _flavorRecId )
+    {
+        RefRecId ret;
+
+        if (_productMaster && _productDimensionAttribute && _flavorRecId)
+        {
+            ret = (select firstonly ecoResProductMasterFlavor
+                    where ecoResProductMasterFlavor.FlavorProductMaster               == _productMaster
+                       && ecoResProductMasterFlavor.FlavorProductDimensionAttribute   == _productDimensionAttribute
+                       && ecoResProductMasterFlavor.Flavor                            == _flavorRecId
+                    ).RecId;
+        }
+
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>setDimensionValueAndRelations</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Sets the product dimension value and relation fields on the buffer.
+    /// </summary>
+    /// <param name="_productMaster">
+    ///    A reference to the product master.
+    /// </param>
+    /// <param name="_productDimensionAttribute">
+    ///    An ID of the <c>EcoResProductDimensionAttribute</c> table buffer.
+    /// </param>
+    /// <param name="_productDimensionValue">
+    ///    The reference to the product dimension value table buffer.
+    /// </param>
+    /// <exception cref="M:Exception::Error">
+    ///    This method should be overridden on the sub type tables.
+    /// </exception>
+    public void setDimensionValueAndRelations(
+        EcoResProductRecId  _productMaster,
+        RefRecId            _productDimensionAttribute,
+        RefRecId            _productDimensionValue)
+    {
+        this.Flavor                          = _productDimensionValue;
+        this.FlavorProductMaster             = _productMaster;
+        this.FlavorProductDimensionAttribute = _productDimensionAttribute;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>validateDelete</Name>
+				<Source><![CDATA[
+    public boolean validateDelete()
+    {
+        EcoResDistinctProductVariant    ecoResDistinctProductVariant;
+        EcoResProductVariantFlavor      ecoResProductVariantFlavor;
+        boolean                         ret;
+
+        ret = super();
+
+        select firstonly ecoResProductVariantFlavor
+            where   ecoResProductVariantFlavor.Flavor                       == this.Flavor
+                &&  ecoResProductVariantFlavor.ProductDimensionAttribute   == this.FlavorProductDimensionAttribute
+            exists join ecoResDistinctProductVariant
+                where   ecoResDistinctProductVariant.RecId                == ecoResProductVariantFlavor.DistinctProductVariant
+                    &&  ecoResDistinctProductVariant.ProductMaster        == this.FlavorProductMaster;
+
+        if (ecoResProductVariantFlavor.RecId != 0)
+        {
+            ret = checkFailed(strFmt("@SYS128564", tablePName(EcoResProductMasterFlavor),
+                                                   tablePName(EcoResProductVariantFlavor)));
+        }
+
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>validateDimensionValueAndRelations</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Validates the product dimension value and relation fields on the buffer.
+    /// </summary>
+    /// <param name="_productMaster">
+    /// A reference to the product master.
+    /// </param>
+    /// <param name="_productDimensionAttribute">
+    /// An ID of a <c>EcoResProductDimensionAttribute</c> table buffer.
+    /// </param>
+    /// <param name="_productDimensionValue">
+    /// The reference to the product dimension value table buffer.
+    /// </param>
+    /// <param name="_throwError">
+    /// A Boolean value that indicates whether to throw an exception if the dimension has been assigned to
+    /// the product master.
+    /// </param>
+    /// <returns>
+    /// true if the product dimension table value exists for specified product; otherwise, false.
+    /// </returns>
+    public boolean validateDimensionValueAndRelations(
+        EcoResProductRecId  _productMaster,
+        RefRecId            _productDimensionAttribute,
+        RefRecId            _productDimensionValue,
+        boolean             _throwError = false)
+    {
+        if (EcoResProductMasterFlavor::existByProductFlavor(
+            _productMaster,
+            _productDimensionAttribute,
+            _productDimensionValue))
+        {
+            if (_throwError)
+            {
+                throw error(EcoResProductMasterDimensionValue::txtNotExist(
+                    EcoResFlavor::label(),
+                    EcoResFlavor::find(_productDimensionValue).Name,
+                    EcoResProductIdentifier::findByProduct(_productMaster).ProductNumber));
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>checkExistDimensionValue</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Validates the product dimension value exists.
+    /// </summary>
+    /// <param name="_productMaster">
+    ///    The <c>EcoResProductRecId</c> reference to the product master.
+    /// </param>
+    /// <param name="_productDimensionAttribute">
+    ///    An ID of the <c>EcoResProductDimensionAttribute</c> table buffer.
+    /// </param>
+    /// <param name="_productDimensionValue">
+    ///    The reference to the product dimension value table buffer.
+    /// </param>
+    /// <param name="_throwError">
+    ///    A Boolean value that indicates whether an exception is thrown, in case the dimension does not exists.
+    /// </param>
+    /// <returns>
+    ///    true if the product dimension value exists for a specified product; otherwise false.
+    /// </returns>
+    public boolean checkExistDimensionValue(
+        EcoResProductRecId  _productMaster,
+        RefRecId            _productDimensionAttribute,
+        RefRecId            _productDimensionValue,
+        boolean             _throwError = false)
+    {
+        return EcoResProductMasterFlavor::checkExistByProductFlavor(
+            _productMaster,
+            _productDimensionAttribute,
+            _productDimensionValue,
+            _throwError);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>validateWrite</Name>
+				<Source><![CDATA[
+    public boolean validateWrite()
+    {
+        boolean     ret;
+
+        ret = super();
+
+        ret = ret && this.validateActiveProductDimension(this.FlavorProductMaster, InventDim::fieldIdFlavor());
+
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>checkExistByProductFlavor</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Checks whether the specified record exists in the <c>EcoResProductMasterFlavor</c> table; if not, an
+    /// error message is displayed or an exception thrown.
+    /// </summary>
+    /// <param name="_productMaster">
+    /// The ID of the <c>EcoResProductMaster</c> record that is used as a filter.
+    /// </param>
+    /// <param name="_productDimensionAttribute">
+    /// The ID of the <c>EcoResProductDimensionAttribute</c> record that is used as a filter.
+    /// </param>
+    /// <param name="_flavorRecId">
+    /// The ID of the <c>EcoResFlavor</c> record that is used as a filter.
+    /// </param>
+    /// <param name="_throwException">
+    /// A Boolean value that indicates whether a message is displayed or an exception is thrown.
+    /// </param>
+    /// <returns>
+    /// true if the specified record exists; otherwise, false.
+    /// </returns>
+    /// <exception cref="M:Exception::Error">
+    /// The <paramref name="_throwException" /> parameter is true and the record does not exist.
+    /// </exception>
+    static boolean checkExistByProductFlavor(
+        RefRecId            _productMaster,
+        RefRecId            _productDimensionAttribute,
+        EcoResFlavorRecId   _flavorRecId,
+        boolean             _throwException = false)
+    {
+        EcoResProduct   ecoResProduct;
+        EcoResFlavor    ecoResFlavor;
+        str             message;
+
+        if (_productMaster
+            && _productDimensionAttribute
+            && _flavorRecId
+            && !EcoResProductMasterFlavor::existByProductFlavor(_productMaster, _productDimensionAttribute, _flavorRecId))
+        {
+            ecoResProduct   = EcoResProduct::find(_productMaster);
+            ecoResFlavor    = EcoResFlavor::find(_flavorRecId);
+            message         = EcoResProductMasterFlavor::txtNotExist(ecoResFlavor.Name, ecoResProduct.productNumber());
+            if (_throwException)
+            {
+                throw error(message);
+            }
+            return checkFailed(message);
+        }
+
+        return true;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>existByProductFlavor</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Indicates whether the specified record in the <c>EcoResProductMasterFlavor</c> table exists.
+    /// </summary>
+    /// <param name="_productMaster">
+    ///    The ID of the <c>EcoResProductMaster</c> record to use as a filter.
+    /// </param>
+    /// <param name="_productDimensionAttribute">
+    ///    The ID of the <c>EcoResProductDimensionAttribute</c> record to use as a filter.
+    /// </param>
+    /// <param name="_flavorRecId">
+    ///    The ID of the <c>EcoResFlavor</c> record to use as a filter.
+    /// </param>
+    /// <returns>
+    ///    true if the specified record exists; otherwise, false.
+    /// </returns>
+    static boolean existByProductFlavor(
+        RefRecId            _productMaster,
+        RefRecId            _productDimensionAttribute,
+        EcoResFlavorRecId   _flavorRecId)
+    {
+        if (_productMaster && _productDimensionAttribute && _flavorRecId)
+        {
+            return (select firstonly ecoResProductMasterFlavor
+                    where ecoResProductMasterFlavor.FlavorProductMaster               == _productMaster
+                       && ecoResProductMasterFlavor.FlavorProductDimensionAttribute   == _productDimensionAttribute
+                       && ecoResProductMasterFlavor.Flavor                            == _flavorRecId
+                    ).RecId != 0;
+        }
+
+        return false;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>txtNotExist</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Creates a warning message in case the product dimension table value does not exist for the
+    ///    specified product.
+    /// </summary>
+    /// <param name="_value">
+    ///    The <c>Name</c> value that corresponds to the possible product dimension table value.
+    /// </param>
+    /// <param name="_productNumber">
+    ///    The <c>EcoResProductNumber</c> value that corresponds to the product ID value.
+    /// </param>
+    /// <returns>
+    ///    A warning message in case the product dimension table value does not exist for the specified
+    ///    product.
+    /// </returns>
+    public static TxtNotExist txtNotExist(Name _value, EcoResProductNumber _productNumber)
+    {
+        return EcoResProductMasterDimensionValue::txtNotExist(EcoResFlavor::label(), _value, _productNumber);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>find</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Finds a <c>EcoResProductMasterFlavor</c> record.
+    /// </summary>
+    /// <param name="_productMaster">
+    /// An integer value that represents the product record ID.
+    /// </param>
+    /// <param name="_flavorRecId">
+    /// An integer value that represents the flavor record ID.
+    /// </param>
+    /// <param name="_inventDimFieldId">
+    /// An integer value that represents the ID of the product dimension field in the
+    /// <c>InventDim</c> table.
+    /// </param>
+    /// <param name="_forupdate">
+    /// A Boolean value that indicates whether the record must be selected for update; optional.
+    /// </param>
+    /// <returns>
+    /// A <c>EcoResProductMasterFlavor</c> record.
+    /// </returns>
+    public static EcoResProductMasterFlavor find(
+        RefRecId                    _productMaster,
+        EcoResFlavorRecId           _flavorRecId,
+        FieldId                     _inventDimFieldId   = InventDim::fieldIdFlavor(),
+        boolean                     _forupdate          = false)
+    {
+        EcoResProductMasterFlavor   ecoResProductMasterFlavor;
+        RefRecId                    ecoResProductDimensionAttributeRecId;
+
+        ecoResProductMasterFlavor.selectForUpdate(_forupdate);
+
+        if (   _productMaster
+            && _flavorRecId)
+        {
+            ecoResProductDimensionAttributeRecId = EcoResProductDimensionAttribute::inventDimFieldId2DimensionAttributeRecId(_inventDimFieldId);
+
+            select firstonly ecoResProductMasterFlavor
+                where ecoResProductMasterFlavor.FlavorProductMaster               == _productMaster
+                   && ecoResProductMasterFlavor.FlavorProductDimensionAttribute   == ecoResProductDimensionAttributeRecId
+                   && ecoResProductMasterFlavor.Flavor                            == _flavorRecId;
+        }
+
+        return ecoResProductMasterFlavor;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>findTranslationByProduct</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Finds the flavor translation, if one exists, for a given product master.
+    /// </summary>
+    /// <param name="_productMasterRecId">
+    /// An integer value that represents the product master record id.
+    /// </param>
+    /// <param name="_flavorName">
+    /// The flavor name. Note that the Name field is the ID of the EcoResFlavor table.
+    /// </param>
+    /// <param name="_languageId">
+    /// The SystemLanguageId to find the translation for.
+    /// </param>
+    /// <returns>
+    /// The flavor translation for the product master.
+    /// </returns>
+    public static EcoResProductMasterDimValueTranslation findTranslationByProduct(EcoResProductRecId _productMasterRecId, EcoResItemFlavorName _flavorName, SystemLanguageId _languageId)
+    {
+        EcoResProductMasterDimValueTranslation valueTranslation;
+        EcoResProductMasterFlavor masterFlavor;
+        EcoResFlavor flavor;
+        select firstonly valueTranslation
+            exists join masterFlavor
+                where masterFlavor.FlavorProductMaster == _productMasterRecId
+                && masterFlavor.RecId == valueTranslation.ProductMasterDimensionValue
+                && valueTranslation.LanguageId == _languageId
+            exists join flavor
+                where flavor.RecId == masterFlavor.Flavor
+                && flavor.Name == _flavorName;
+
+        return valueTranslation;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<DeveloperDocumentation>@ProductFlavor:EcoResProductMasterFlavor_DeveloperDocumentation</DeveloperDocumentation>
+	<EntityRelationshipType>Relationship</EntityRelationshipType>
+	<FormRef>EcoResProductMasterDimensionAction</FormRef>
+	<Label>@ProductFlavor:EcoResProductMasterFlavor_Name</Label>
+	<TableGroup>Main</TableGroup>
+	<TitleField1>FlavorProductMaster</TitleField1>
+	<TitleField2>Flavor</TitleField2>
+	<CacheLookup>Found</CacheLookup>
+	<Extends>EcoResProductMasterDimensionValue</Extends>
+	<SaveDataPerCompany>No</SaveDataPerCompany>
+	<SupportInheritance>Yes</SupportInheritance>
+	<DeleteActions />
+	<FieldGroups>
+		<AxTableFieldGroup>
+			<Name>AutoReport</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>FlavorProductMaster</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>FlavorProductDimensionAttribute</DataField>
+				</AxTableFieldGroupField>
+				<AxTableFieldGroupField>
+					<DataField>Flavor</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoLookup</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoIdentification</Name>
+			<AutoPopulate>Yes</AutoPopulate>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoSummary</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoBrowse</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>Overview</Name>
+			<Label>@SYS9039</Label>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Flavor</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+	</FieldGroups>
+	<Fields>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldInt64">
+			<Name>Flavor</Name>
+			<AllowEdit>No</AllowEdit>
+			<ExtendedDataType>EcoResFlavorRecId</ExtendedDataType>
+			<Mandatory>Yes</Mandatory>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldInt64">
+			<Name>FlavorProductDimensionAttribute</Name>
+			<AllowEdit>No</AllowEdit>
+			<ExtendedDataType>RefRecId</ExtendedDataType>
+			<Mandatory>Yes</Mandatory>
+			<Visible>No</Visible>
+		</AxTableField>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldInt64">
+			<Name>FlavorProductMaster</Name>
+			<AllowEdit>No</AllowEdit>
+			<ExtendedDataType>RefRecId</ExtendedDataType>
+			<Mandatory>Yes</Mandatory>
+		</AxTableField>
+	</Fields>
+	<FullTextIndexes />
+	<Indexes>
+		<AxTableIndex>
+			<Name>FK_EcoResFlavor</Name>
+			<AllowDuplicates>Yes</AllowDuplicates>
+			<Fields>
+				<AxTableIndexField>
+					<DataField>Flavor</DataField>
+				</AxTableIndexField>
+			</Fields>
+		</AxTableIndex>
+		<AxTableIndex>
+			<Name>FK_EcoResProductDimensionAttribute</Name>
+			<AllowDuplicates>Yes</AllowDuplicates>
+			<Fields>
+				<AxTableIndexField>
+					<DataField>FlavorProductDimensionAttribute</DataField>
+				</AxTableIndexField>
+			</Fields>
+		</AxTableIndex>
+		<AxTableIndex>
+			<Name>ProductFlavorIdx</Name>
+			<AlternateKey>Yes</AlternateKey>
+			<Fields>
+				<AxTableIndexField>
+					<DataField>FlavorProductMaster</DataField>
+				</AxTableIndexField>
+				<AxTableIndexField>
+					<DataField>FlavorProductDimensionAttribute</DataField>
+				</AxTableIndexField>
+				<AxTableIndexField>
+					<DataField>Flavor</DataField>
+				</AxTableIndexField>
+			</Fields>
+		</AxTableIndex>
+	</Indexes>
+	<Mappings />
+	<Relations>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>FlavorEcoResProductDimensionAttribute</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<OnDelete>Restricted</OnDelete>
+			<RelatedTable>EcoResProductDimensionAttribute</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelatedTableRole>FlavorEcoResProductDimensionAttribute</RelatedTableRole>
+			<RelationshipType>Association</RelationshipType>
+			<Role>FlavorEcoResProductDimensionAttribute_EcoResProductMasterFlavor</Role>
+			<UseDefaultRoleNames>No</UseDefaultRoleNames>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>FlavorProductDimensionAttribute</Name>
+					<Field>FlavorProductDimensionAttribute</Field>
+					<RelatedField>RecId</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>RecId</Index>
+		</AxTableRelation>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>FlavorEcoResProductMaster</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<OnDelete>Cascade</OnDelete>
+			<RelatedTable>EcoResProductMaster</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelatedTableRole>FlavorEcoResProductMaster</RelatedTableRole>
+			<RelationshipType>Composition</RelationshipType>
+			<Role>FlavorEcoResProductMaster_EcoResProductMasterFlavor</Role>
+			<UseDefaultRoleNames>No</UseDefaultRoleNames>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>FlavorProductMaster</Name>
+					<Field>FlavorProductMaster</Field>
+					<RelatedField>RecId</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>RecId</Index>
+		</AxTableRelation>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>FlavorEcoResProductMasterDimensionValue</Name>
+			<Cardinality>ZeroOne</Cardinality>
+			<OnDelete>Cascade</OnDelete>
+			<RelatedTable>EcoResProductMasterDimensionValue</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelationshipType>Specialization</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>RecId</Name>
+					<Field>RecId</Field>
+					<RelatedField>RecId</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>RecId</Index>
+		</AxTableRelation>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>EcoResFlavor</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<OnDelete>Restricted</OnDelete>
+			<RelatedTable>EcoResFlavor</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelatedTableRole>SourceFlavor</RelatedTableRole>
+			<RelationshipType>Association</RelationshipType>
+			<Role>EcoResFlavor_EcoResProductMasterFlavor</Role>
+			<UseDefaultRoleNames>No</UseDefaultRoleNames>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>Flavor</Name>
+					<Field>Flavor</Field>
+					<RelatedField>RecId</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>RecId</Index>
+		</AxTableRelation>
+	</Relations>
+	<StateMachines />
+</AxTable>

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxFormExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="Microsoft.Dynamics.AX.Metadata.V6">
+	<Name>EcoResProductMasterDimension.Extension</Name>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<ControlModifications />
+	<Controls>
+		<AxFormExtensionControl xmlns="">
+			<Name>FormExtensionControls50q1qsh1</Name>
+			<FormControl xmlns=""
+				i:type="AxFormTabPageControl">
+				<Name>TabPageFlavors</Name>
+				<AutoDeclaration>Yes</AutoDeclaration>
+				<Type>TabPage</Type>
+				<FormControlExtension
+					i:nil="true" />
+				<Controls>
+					<AxFormControl xmlns=""
+						i:type="AxFormGroupControl">
+						<Name>PageFlavorsHeader</Name>
+						<ElementPosition>1073741822</ElementPosition>
+						<FilterExpression>%1</FilterExpression>
+						<Skip>Yes</Skip>
+						<Type>Group</Type>
+						<VerticalSpacing>-1</VerticalSpacing>
+						<WidthMode>SizeToAvailable</WidthMode>
+						<FormControlExtension
+							i:nil="true" />
+						<Controls>
+							<AxFormControl xmlns=""
+								i:type="AxFormStaticTextControl">
+								<Name>PageFlavorsMainInstruction</Name>
+								<ElementPosition>1431655764</ElementPosition>
+								<FilterExpression>%1</FilterExpression>
+								<Skip>Yes</Skip>
+								<Type>StaticText</Type>
+								<VerticalSpacing>-1</VerticalSpacing>
+								<WidthMode>SizeToAvailable</WidthMode>
+								<FormControlExtension
+									i:nil="true" />
+								<Style>MainInstruction</Style>
+								<Text>@ProductFlavor:EcoResProductMasterDimension_FlavorsTabInstructions</Text>
+							</AxFormControl>
+						</Controls>
+						<AllowUserSetup>No</AllowUserSetup>
+						<FrameType>None</FrameType>
+						<Style>TOCTitleContainer</Style>
+					</AxFormControl>
+					<AxFormControl xmlns=""
+						i:type="AxFormGroupControl">
+						<Name>PageFlavorsBody</Name>
+						<ElementPosition>1610612734</ElementPosition>
+						<FilterExpression>%1</FilterExpression>
+						<HeightMode>SizeToAvailable</HeightMode>
+						<Pattern>ToolbarList</Pattern>
+						<PatternVersion>1.2</PatternVersion>
+						<Type>Group</Type>
+						<VerticalSpacing>-1</VerticalSpacing>
+						<WidthMode>SizeToAvailable</WidthMode>
+						<FormControlExtension
+							i:nil="true" />
+						<Controls>
+							<AxFormControl xmlns=""
+								i:type="AxFormActionPaneControl">
+								<Name>ActionPaneFlavors</Name>
+								<ElementPosition>858993458</ElementPosition>
+								<FilterExpression>%1</FilterExpression>
+								<Type>ActionPane</Type>
+								<VerticalSpacing>-1</VerticalSpacing>
+								<FormControlExtension
+									i:nil="true" />
+								<Controls>
+									<AxFormControl xmlns=""
+										i:type="AxFormActionPaneTabControl">
+										<Name>ActionPaneTabFlavors</Name>
+										<ElementPosition>1431655764</ElementPosition>
+										<FilterExpression>%1</FilterExpression>
+										<HeightMode>Auto</HeightMode>
+										<Type>ActionPaneTab</Type>
+										<VerticalSpacing>-1</VerticalSpacing>
+										<WidthMode>Auto</WidthMode>
+										<FormControlExtension
+											i:nil="true" />
+										<Controls>
+											<AxFormControl xmlns=""
+												i:type="AxFormButtonGroupControl">
+												<Name>ButtonGroupFlavors</Name>
+												<ElementPosition>1431655764</ElementPosition>
+												<FilterExpression>%1</FilterExpression>
+												<HeightMode>Auto</HeightMode>
+												<Left>0</Left>
+												<Type>ButtonGroup</Type>
+												<VerticalSpacing>-1</VerticalSpacing>
+												<WidthMode>Auto</WidthMode>
+												<FormControlExtension
+													i:nil="true" />
+												<Controls>
+													<AxFormControl xmlns=""
+														i:type="AxFormCommandButtonControl">
+														<Name>NewFlavor</Name>
+														<ElementPosition>1073741822</ElementPosition>
+														<FilterExpression>%1</FilterExpression>
+														<HeightMode>Auto</HeightMode>
+														<Type>CommandButton</Type>
+														<VerticalSpacing>-1</VerticalSpacing>
+														<WidthMode>Auto</WidthMode>
+														<FormControlExtension
+															i:nil="true" />
+														<Command>New</Command>
+														<SaveRecord>No</SaveRecord>
+														<Text>@SYS2055</Text>
+													</AxFormControl>
+													<AxFormControl xmlns=""
+														i:type="AxFormCommandButtonControl">
+														<Name>DeleteFlavor</Name>
+														<ElementPosition>1610612733</ElementPosition>
+														<FilterExpression>%1</FilterExpression>
+														<HeightMode>Auto</HeightMode>
+														<Type>CommandButton</Type>
+														<VerticalSpacing>-1</VerticalSpacing>
+														<WidthMode>Auto</WidthMode>
+														<FormControlExtension
+															i:nil="true" />
+														<Command>DeleteRecord</Command>
+														<SaveRecord>No</SaveRecord>
+														<Text>@SYS14425</Text>
+													</AxFormControl>
+												</Controls>
+												<ArrangeMethod>Vertical</ArrangeMethod>
+											</AxFormControl>
+											<AxFormControl xmlns=""
+												i:type="AxFormButtonGroupControl">
+												<Name>ButtonGroupFlavorTranslation</Name>
+												<ElementPosition>1789569705</ElementPosition>
+												<FilterExpression>%1</FilterExpression>
+												<HeightMode>Auto</HeightMode>
+												<Left>0</Left>
+												<Type>ButtonGroup</Type>
+												<VerticalSpacing>-1</VerticalSpacing>
+												<WidthMode>Auto</WidthMode>
+												<FormControlExtension
+													i:nil="true" />
+												<Controls>
+													<AxFormControl xmlns=""
+														i:type="AxFormMenuFunctionButtonControl">
+														<Name>EcoResProductMasterFlavorValueTranslationAction</Name>
+														<ElementPosition>1431655764</ElementPosition>
+														<FilterExpression>%1</FilterExpression>
+														<HeightMode>Auto</HeightMode>
+														<Type>MenuFunctionButton</Type>
+														<VerticalSpacing>-1</VerticalSpacing>
+														<WidthMode>Auto</WidthMode>
+														<FormControlExtension
+															i:nil="true" />
+														<MenuItemName>EcoResProductMasterDimValueTranslation</MenuItemName>
+														<NeedsRecord>Yes</NeedsRecord>
+													</AxFormControl>
+												</Controls>
+												<ArrangeMethod>Vertical</ArrangeMethod>
+											</AxFormControl>
+										</Controls>
+										<AlignChild>No</AlignChild>
+										<AlignChildren>No</AlignChildren>
+										<ArrangeMethod>Vertical</ArrangeMethod>
+									</AxFormControl>
+								</Controls>
+								<AlignChild>No</AlignChild>
+								<AlignChildren>No</AlignChildren>
+								<ArrangeMethod>Vertical</ArrangeMethod>
+								<DataSource>EcoResProductMasterFlavor</DataSource>
+								<Style>Strip</Style>
+							</AxFormControl>
+							<AxFormControl xmlns=""
+								i:type="AxFormGridControl">
+								<Name>GridFlavors</Name>
+								<ElementPosition>1181116005</ElementPosition>
+								<FilterExpression>%1</FilterExpression>
+								<Type>Grid</Type>
+								<VerticalSpacing>-1</VerticalSpacing>
+								<FormControlExtension
+									i:nil="true" />
+								<Controls>
+									<AxFormControl xmlns=""
+										i:type="AxFormStringControl">
+										<Name>EcoResFlavor_Name</Name>
+										<AutoDeclaration>Yes</AutoDeclaration>
+										<ElementPosition>1073741822</ElementPosition>
+										<FilterExpression>%1</FilterExpression>
+										<HeightMode>Auto</HeightMode>
+										<Type>String</Type>
+										<VerticalSpacing>-1</VerticalSpacing>
+										<WidthMode>Auto</WidthMode>
+										<FormControlExtension
+											i:nil="true" />
+										<DataField>Name</DataField>
+										<DataSource>EcoResFlavor</DataSource>
+									</AxFormControl>
+									<AxFormControl xmlns=""
+										i:type="AxFormStringControl">
+										<Name>EcoResProductMasterFlavor_Name</Name>
+										<ElementPosition>1476395005</ElementPosition>
+										<FilterExpression>%1</FilterExpression>
+										<HeightMode>Auto</HeightMode>
+										<Type>String</Type>
+										<VerticalSpacing>-1</VerticalSpacing>
+										<WidthMode>Auto</WidthMode>
+										<FormControlExtension
+											i:nil="true" />
+										<DataField>Name</DataField>
+										<DataSource>ProductMasDimValueTranslationFlavor</DataSource>
+									</AxFormControl>
+									<AxFormControl xmlns=""
+										i:type="AxFormStringControl">
+										<Name>EcoResProductMasterFlavor_Description</Name>
+										<ElementPosition>1476395005</ElementPosition>
+										<FilterExpression>%1</FilterExpression>
+										<HeightMode>Auto</HeightMode>
+										<HelpText>@FieldDescriptions_ProductInformationManagement:EcoResProductMasterDimension_EcoResProductMasterStyle_Description</HelpText>
+										<Type>String</Type>
+										<VerticalSpacing>-1</VerticalSpacing>
+										<WidthMode>Auto</WidthMode>
+										<FormControlExtension
+											i:nil="true" />
+										<DataField>Description</DataField>
+										<DataSource>ProductMasDimValueTranslationFlavor</DataSource>
+									</AxFormControl>
+									<AxFormControl xmlns=""
+										i:type="AxFormIntegerControl">
+										<Name>EcoResProductMasterFlavor_RetailWeight</Name>
+										<ElementPosition>1879048189</ElementPosition>
+										<FilterExpression>%1</FilterExpression>
+										<HeightMode>Auto</HeightMode>
+										<Type>Integer</Type>
+										<VerticalSpacing>-1</VerticalSpacing>
+										<WidthMode>Auto</WidthMode>
+										<FormControlExtension
+											i:nil="true" />
+										<DataField>RetailWeight</DataField>
+										<DataSource>EcoResProductMasterFlavor</DataSource>
+									</AxFormControl>
+									<AxFormControl xmlns=""
+										i:type="AxFormRealControl">
+										<Name>EcoResProductMasterFlavor_RetailDisplayOrder</Name>
+										<AutoDeclaration>Yes</AutoDeclaration>
+										<Type>Real</Type>
+										<Visible>No</Visible>
+										<FormControlExtension
+											i:nil="true" />
+										<DataField>RetailDisplayOrder</DataField>
+										<DataSource>EcoResProductMasterFlavor</DataSource>
+										<NoOfDecimals>2</NoOfDecimals>
+										<NoOfDecimalsMode>Fixed</NoOfDecimalsMode>
+									</AxFormControl>
+								</Controls>
+								<DataSource>EcoResProductMasterFlavor</DataSource>
+							</AxFormControl>
+						</Controls>
+						<FrameType>None</FrameType>
+					</AxFormControl>
+				</Controls>
+				<Caption>@ProductFlavor:EcoResProductMasterDimension_FlavorsTabCaption</Caption>
+				<DataSource>EcoResProductMasterFlavor</DataSource>
+			</FormControl>
+			<Parent>TOCTab</Parent>
+		</AxFormExtensionControl>
+	</Controls>
+	<DataSources>
+		<AxFormDataSource xmlns="">
+			<Name>EcoResFlavor</Name>
+			<Table>EcoResFlavor</Table>
+			<Fields>
+				<AxFormDataSourceField>
+					<DataField>Name</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>Partition</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>RecId</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>TableId</DataField>
+				</AxFormDataSourceField>
+			</Fields>
+			<ReferencedDataSources />
+			<JoinSource>EcoResProductMasterFlavor</JoinSource>
+			<LinkType>InnerJoin</LinkType>
+			<AllowCheck>No</AllowCheck>
+			<Index>NameIdx</Index>
+			<DataSourceLinks />
+			<DerivedDataSources />
+		</AxFormDataSource>
+		<AxFormDataSource xmlns="">
+			<Name>EcoResProductMasterFlavor</Name>
+			<Table>EcoResProductMasterFlavor</Table>
+			<Fields>
+				<AxFormDataSourceField>
+					<DataField>Flavor</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>FlavorProductDimensionAttribute</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>FlavorProductMaster</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>InstanceRelationType</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>Partition</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>RecId</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>RetailDisplayOrder</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>RetailWeight</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>TableId</DataField>
+				</AxFormDataSourceField>
+			</Fields>
+			<ReferencedDataSources />
+			<AllowCheck>No</AllowCheck>
+			<InsertIfEmpty>No</InsertIfEmpty>
+			<DataSourceLinks />
+			<DerivedDataSources />
+		</AxFormDataSource>
+		<AxFormDataSource xmlns="">
+			<Name>ProductMasDimValueTranslationFlavor</Name>
+			<Table>EcoResProductMasterDimValueTranslation</Table>
+			<Fields>
+				<AxFormDataSourceField>
+					<DataField>Description</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>LanguageId</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>Name</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>Partition</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>ProductMasterDimensionValue</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>RecId</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
+					<DataField>TableId</DataField>
+				</AxFormDataSourceField>
+			</Fields>
+			<ReferencedDataSources />
+			<JoinSource>EcoResProductMasterFlavor</JoinSource>
+			<LinkType>OuterJoin</LinkType>
+			<InsertIfEmpty>No</InsertIfEmpty>
+			<DataSourceLinks />
+			<DerivedDataSources />
+		</AxFormDataSource>
+	</DataSources>
+	<Parts />
+	<PropertyModifications />
+</AxFormExtension>

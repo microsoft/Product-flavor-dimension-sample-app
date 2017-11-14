@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTableExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>RetailTmpDimensionValueDisplayOrder.Extension</Name>
+	<FieldGroupExtensions />
+	<FieldGroups />
+	<FieldModifications />
+	<Fields>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>EcoResFlavor</Name>
+			<ExtendedDataType>EcoResItemFlavorName</ExtendedDataType>
+		</AxTableField>
+	</Fields>
+	<Indexes />
+	<Mappings />
+	<PropertyModifications />
+	<Relations>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>EcoResFlavor</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<RelatedTable>EcoResFlavor</RelatedTable>
+			<RelatedTableCardinality>ZeroOne</RelatedTableCardinality>
+			<RelationshipType>Association</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>EcoResFlavor</Name>
+					<Field>EcoResFlavor</Field>
+					<RelatedField>Name</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>NameIdx</Index>
+		</AxTableRelation>
+	</Relations>
+</AxTableExtension>

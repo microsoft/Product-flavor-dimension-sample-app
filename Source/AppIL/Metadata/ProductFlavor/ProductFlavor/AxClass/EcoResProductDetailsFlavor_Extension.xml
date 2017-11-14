@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductDetailsFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>EcoResProductDetailsFlavor_Extension</c> class extends the <c>EcoResProductDetails</c> form in order to add new flavor dimension functionality.
+/// </summary>
+[ExtensionOf(formStr(EcoResProductDetails))]
+final public class EcoResProductDetailsFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>initInventDimensionsMetadataEntries</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Extends the original class method in order to add metadata for the new dimension.
+    /// </summary>
+    protected void initInventDimensionsMetadataEntries()
+    {
+        next initInventDimensionsMetadataEntries();
+        
+        this.addInventDimensionMetadata(
+            InventDim::fieldIdFlavor(),
+            fieldNum(EcoResProductMaster, RetailFlavorGroupId));
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

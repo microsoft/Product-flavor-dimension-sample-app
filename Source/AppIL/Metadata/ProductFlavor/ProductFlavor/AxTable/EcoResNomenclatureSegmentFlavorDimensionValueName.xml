@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTable xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResNomenclatureSegmentFlavorDimensionValueName</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+public class EcoResNomenclatureSegmentFlavorDimensionValueName extends common
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>getSegmentValue</Name>
+				<Source><![CDATA[
+    public EcoResNomenclatureOutput getSegmentValue(EcoResNomenclatureInput _input)
+    {
+        return _input.parmDimensionValueName(InventProductDimensionFlavor::getInstance());
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>isSegmentAllowedForNomenclatureType</Name>
+				<Source><![CDATA[
+    public static boolean isSegmentAllowedForNomenclatureType(TableId _nomenclatureType)
+    {
+        return (_nomenclatureType == tableNum(EcoResProductVariantNomenclature));
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>getSegmentSampleValue</Name>
+				<Source><![CDATA[
+    public EcoResNomenclatureOutput getSegmentSampleValue(EcoResNomenclatureInput _input)
+    {
+        EcoResNomenclatureOutput ret = strFmt("@ProductFlavor:EcoResNomenclatureSegmentSampleValue");
+
+        EcoResProductMasterFlavor flavor;
+        flavor  = this.getFirstOrNull(flavor);
+
+        if (flavor)
+        {
+            LanguageId sysLanguage  = SystemParameters::getSystemLanguageId();
+            Name flavorName          = EcoResProductMasterDimValueTranslation::findByProductMasterDimValLanguage(flavor.RecId, sysLanguage).Name;
+        
+            if (flavorName)
+            {
+                _input.parmDimensionValueName(InventProductDimensionFlavor::getInstance(), flavorName);
+                ret = this.getSegmentValue(_input);
+            }            
+        }
+                       
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<DeveloperDocumentation>@ProductFlavor:EcoResNomenclatureSegmentFlavorDimensionValueName_DeveloperDocumentation</DeveloperDocumentation>
+	<Label>@ProductFlavor:EcoResNomenclatureSegmentFlavorDimensionValueName_Label</Label>
+	<TableGroup>Group</TableGroup>
+	<CacheLookup>FoundAndEmpty</CacheLookup>
+	<Extends>EcoResNomenclatureSegment</Extends>
+	<SaveDataPerCompany>No</SaveDataPerCompany>
+	<SupportInheritance>Yes</SupportInheritance>
+	<TableContents>BaseData</TableContents>
+	<DeleteActions />
+	<FieldGroups>
+		<AxTableFieldGroup>
+			<Name>AutoReport</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoLookup</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoIdentification</Name>
+			<AutoPopulate>Yes</AutoPopulate>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoSummary</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoBrowse</Name>
+			<Fields />
+		</AxTableFieldGroup>
+	</FieldGroups>
+	<Fields />
+	<FullTextIndexes />
+	<Indexes />
+	<Mappings />
+	<Relations>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>EcoResNomenclatureSegment</Name>
+			<Cardinality>ZeroOne</Cardinality>
+			<RelatedTable>EcoResNomenclatureSegment</RelatedTable>
+			<RelatedTableCardinality>ExactlyOne</RelatedTableCardinality>
+			<RelationshipType>Specialization</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>RecId</Name>
+					<Field>RecId</Field>
+					<RelatedField>RecId</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>RecId</Index>
+		</AxTableRelation>
+	</Relations>
+	<StateMachines />
+</AxTable>

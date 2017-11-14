@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTable xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResFlavor</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+public class EcoResFlavor extends common
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>exist</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Determines whether the specified record in the <c>EcoResFlavor</c> table exists.
+    /// </summary>
+    /// <param name="_recId">
+    ///    The ID of the <c>EcoResFlavor</c> record to find.
+    /// </param>
+    /// <returns>
+    ///    true if the specified record exists; otherwise, false.
+    /// </returns>
+    static boolean exist(RefRecId _recId)
+    {
+        if (!_recId)
+        {
+            return false;
+        }
+
+        return (select firstonly RecId from EcoResFlavor
+                    where EcoResFlavor.RecId == _recId).RecId != 0;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>find</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Finds the specified record in the <c>EcoResFlavor</c> table.
+    /// </summary>
+    /// <param name="_recId">
+    ///    The ID of the <c>EcoResFlavor</c> record to find.
+    /// </param>
+    /// <param name="_forUpdate">
+    ///    A Boolean value that indicates whether to read the record for update; optional.
+    /// </param>
+    /// <returns>
+    ///    A record in the <c>EcoResFlavor</c> table; otherwise, an empty record.
+    /// </returns>
+    static EcoResFlavor find(RefRecId _recId, boolean _forUpdate = false)
+    {
+        EcoResFlavor ecoResFlavor;
+
+        ecoResFlavor.selectForUpdate(_forUpdate);
+
+        if (0 != _recId)
+        {
+            select firstonly ecoResFlavor
+                where ecoResFlavor.RecId == _recId;
+        }
+        return ecoResFlavor;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>findByName</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Finds the specified record in the <c>EcoResFlavor</c> table.
+    /// </summary>
+    /// <param name="_name">
+    ///    A value of the <c>Name</c> field of the <c>EcoResFlavor</c> table record.
+    /// </param>
+    /// <param name="_forUpdate">
+    ///    A Boolean value that indicates whether to read the record for update; optional.
+    /// </param>
+    /// <returns>
+    ///    A record in the <c>EcoResFlavor</c> table; otherwise, an empty record.
+    /// </returns>
+    static EcoResFlavor findByName(EcoResFlavorName _name, boolean _forUpdate = false)
+    {
+        EcoResFlavor ecoResFlavor;
+
+        ecoResFlavor.selectForUpdate(_forUpdate);
+
+        if (_name)
+        {
+            select firstonly ecoResFlavor
+                where ecoResFlavor.Name == _name;
+        }
+
+        return ecoResFlavor;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>jumpRef</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Adds the Go to Main Table form option to the name lookup.
+    /// </summary>
+    /// <param name="_name">
+    /// A <c>EcoResFlavorName</c> value to look up.
+    /// </param>
+    /// <remarks>
+    /// This method opens the relevant flavor form.
+    /// </remarks>
+    public static void jumpRef(EcoResFlavorName _name)
+    {
+        Args args = new Args();
+
+        args.lookupField(fieldNum(EcoResFlavor, Name));
+        args.lookupValue(_name);
+
+        new MenuFunction(menuitemDisplayStr(RetailEcoResFlavor), MenuItemType::Display).run(args);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>label</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Gets a string with the label of the <c>EcoResFlavorName</c> extended data type.
+    /// </summary>
+    /// <returns>
+    /// A string that contains the label.
+    /// </returns>
+    static FieldLabel label()
+    {
+        return new SysDictType(extendedTypeNum(EcoResFlavorName)).label();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>lookupName</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Displays a lookup form to decide a flavor for a product.
+    /// </summary>
+    /// <param name="_formControl">
+    /// A control for which a lookup is performed.
+    /// </param>
+    /// <param name="_useLookupValue">
+    /// True if filter should be used in the lookup; otherwise false.
+    /// </param>
+    /// <remarks>
+    /// The flavors that are displayed are chosen from the flavors that are assigned to the product master.
+    /// </remarks>
+    public static void lookupName(FormControl _formControl, boolean _useLookupValue = false)
+    {
+        Query                   query = new Query();
+        query.addDataSource(tableNum(EcoResFlavor));
+        SysTableLookup          tableLookup = SysTableLookup::newParameters(tablenum(EcoResFlavor), _formControl);
+        tableLookup.addLookupfield(fieldnum(EcoResFlavor, Name));
+        tableLookup.parmQuery(query);
+        tableLookup.parmUseLookupValue(_useLookupValue);
+        tableLookup.performFormLookup();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>lookupProductVariantFlavor</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Displays a lookup form to use to decide a flavor for a product variant.
+    /// </summary>
+    /// <param name="_formControl">
+    /// A control for which a lookup is performed.
+    /// </param>
+    /// <param name="_productMaster">
+    /// A value that specifies a product master to display in the lookup form.
+    /// </param>
+    /// <param name="_productDimensionAttribute">
+    /// The ID of a record in the <c>EcoResProductDimensionAttribute</c> table that specifies the dimension
+    /// attribute for which flavors are displayed in the lookup form.
+    /// </param>
+    /// <returns>
+    /// A selected <c>EcoResFlavor</c> buffer.
+    /// </returns>
+    /// <remarks>
+    /// The flavors that are displayed are chosen from the flavors that are assigned to the product master.
+    /// </remarks>
+    public static EcoResFlavor lookupProductVariantFlavor(
+        FormControl             _formControl,
+        RefRecId                _productMaster,
+        RefRecId                _productDimensionAttribute)
+    {
+        SysReferenceTableLookup sysReferenceTableLookup;
+        Query                   query;
+
+        sysReferenceTableLookup = SysReferenceTableLookup::newParameters(tableNum(EcoResFlavor), _formControl);
+        sysReferenceTableLookup.addLookupfield(fieldNum(EcoResFlavor, Name));
+
+        query = new Query(queryStr(EcoResProductVariantFlavorLookup));
+        query.dataSourceTable(tableNum(EcoResProductMasterFlavor)).rangeField(fieldNum(EcoResProductMasterFlavor, FlavorProductMaster)).value(queryValue(_productMaster));
+        query.dataSourceTable(tableNum(EcoResProductMasterFlavor)).rangeField(fieldNum(EcoResProductMasterFlavor, FlavorProductDimensionAttribute)).value(queryValue(_productDimensionAttribute));
+
+        sysReferenceTableLookup.parmQuery(query);
+        return sysReferenceTableLookup.performFormLookup() as EcoResFlavor;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>mcrInsertTmpStr</Name>
+				<Source><![CDATA[
+    private static TmpMCRStr mcrInsertTmpStr()
+    {
+        TmpMCRStr                               tmpMCRStr;
+        EcoResFlavor                            ecoResFlavor;
+        EcoResProductMasterFlavor                ecoResProductMasterFlavor;
+        EcoResProductMasterDimValueTranslation  productMasterDimValueTranslation;
+
+        insert_recordset tmpMCRStr (String15, Str60, Str1260)
+            select firstOnly Name from  ecoResFlavor
+                join ecoResProductMasterFlavor
+                    where ecoResProductMasterFlavor.Flavor == ecoResFlavor.RecId
+                join Name, Description from productMasterDimValueTranslation
+                    where productMasterDimValueTranslation.ProductMasterDimensionValue == ecoResProductMasterFlavor.RecId
+                    && productMasterDimValueTranslation.LanguageId == SystemParameters::getSystemLanguageId();
+
+        select firstonly tmpMCRStr; //needed due to the insert_recordset
+        return tmpMCRStr;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>mcrInsertTmpStrByProduct</Name>
+				<Source><![CDATA[
+private static TmpMCRStr mcrInsertTmpStrByProduct(RefRecId _productId)
+    {
+        TmpMCRStr                               tmpMCRStr;
+        EcoResFlavor                            ecoResFlavor;
+        EcoResProductMasterFlavor               ecoResProductMasterFlavor;
+        EcoResProductMasterDimValueTranslation  productMasterDimValueTranslation;
+
+        if (_productId)
+        {
+            insert_recordset tmpMCRStr (String15, Str60, Str1260)
+                select firstOnly Name from  ecoResFlavor
+                    join ecoResProductMasterFlavor
+                        where ecoResProductMasterFlavor.FlavorProductMaster == _productId
+                        && ecoResFlavor.RecId == ecoResProductMasterFlavor.Flavor
+                    outer join Name, Description from productMasterDimValueTranslation
+                        where productMasterDimValueTranslation.ProductMasterDimensionValue == ecoResProductMasterFlavor.RecId
+                        && productMasterDimValueTranslation.LanguageId == SystemParameters::getSystemLanguageId();
+        }
+
+        select firstonly tmpMCRStr; //needed due to the insert_recordset
+        return tmpMCRStr;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>mcrlookupAll</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Loads a lookup form that can be used to choose a flavor.
+    /// </summary>
+    /// <param name="_formControl">
+    /// A control for which a lookup is performed.
+    /// </param>
+    /// <remarks>
+    /// The flavors that are displayed are chosen from the flavors that are assigned to the product master.
+    /// </remarks>
+    public static void mcrlookupAll(FormControl    _formControl)
+    {
+        SysTableLookup                      sysTableLookup = SysTableLookup::newParameters(tableNum(TmpMCRStr), _formControl);
+        TmpMCRStr                           tmpMCRStr;
+
+        tmpMCRStr = EcoResFlavor::mcrInsertTmpStr();
+
+        // BP Deviation Documented
+        sysTableLookup.parmTmpBuffer(tmpMCRStr);
+        sysTableLookup.addLookupfield(fieldNum(TmpMCRStr, String15));
+        sysTableLookup.setLabel("@ProductFlavor_EcoResFlavor_Title");
+        sysTableLookup.addLookupfield(fieldNum(TmpMCRStr, Str60));
+        sysTableLookup.setLabel("@ProductFlavor_EcoResFlavor_Description");
+        sysTableLookup.addLookupfield(fieldNum(TmpMCRStr, Str1260));
+        sysTableLookup.setLabel("@ProductFlavor_EcoResFlavor_AdditionalDescription");
+
+        sysTableLookup.performFormLookup();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>mcrlookupByGroup</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Loads a lookup form that is used to choose a flavor.
+    /// </summary>
+    /// <param name="_formControl">
+    ///    A control for which a lookup is performed.
+    /// </param>
+    /// <param name="_itemGroupId">
+    ///    A value that specifies item group id of flavors to add to lookup form.
+    /// </param>
+    /// <remarks>
+    ///    The flavors that are displayed are chosen from the flavors that are assigned to the product master.
+    /// </remarks>
+    public static void mcrlookupByGroup(
+        FormControl         _formControl,
+        ItemGroupId         _itemGroupId)
+    {
+        SysTableLookup          sysTableLookup = SysTableLookup::newParameters(tableNum(EcoResFlavor), _formControl);
+        Query                   query = new Query();
+        QueryBuildDataSource    qbdsFlavor;
+        QueryBuildDataSource    qbdsFlavorMaster;
+        QueryBuildDataSource    qbdsProductMaster;
+        QueryBuildDataSource    qbdsInventTable;
+        QueryBuildRange         queryBuildRange;
+        QueryBuildDataSource    qbdsInventItemGroupItem;
+
+        qbdsFlavor          =  query.addDataSource(tableNum(EcoResFlavor));
+        qbdsFlavorMaster    =  qbdsFlavor.addDataSource(tableNum(EcoResProductMasterFlavor));
+        qbdsProductMaster   =  qbdsFlavorMaster.addDataSource(tableNum(EcoResProductMaster));
+        qbdsInventTable     =  qbdsFlavorMaster.addDataSource(tableNum(InventTable));
+        qbdsInventTable.addLink(fieldNum(EcoResProductMaster, RecId), fieldNum(InventTable, Product));
+
+        qbdsInventItemGroupItem    = qbdsInventTable.addDataSource(tableNum(InventItemGroupItem));
+        queryBuildRange            = qbdsInventItemGroupItem.addRange(fieldNum(InventItemGroupItem, ItemGroupId));
+        queryBuildRange.value(_itemGroupId);
+
+        sysTableLookup.addLookupfield(fieldNum(EcoResFlavor, Name));
+        sysTableLookup.parmQuery(query);
+        sysTableLookup.performFormLookup();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>mcrlookupByItemOrProduct</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Looks up flavor by item or product (no need for item if product is supplied).
+    /// </summary>
+    /// <param name="_formControl">
+    /// The control on which the look up will be performed.
+    /// </param>
+    /// <param name="_itemId">
+    /// The item for which the products need to be looked up.
+    /// </param>
+    /// <param name="_product">
+    /// The product for which the flavors have to be looked up.
+    /// </param>
+    /// <remarks>
+    /// If the product <c>RefRecId</c> is supplied, the item will get disregarded.
+    /// </remarks>
+    public static void mcrlookupByItemOrProduct(
+        FormControl             _formControl,
+        ItemId                  _itemId,
+        RefRecId                _product = 0
+        )
+    {
+        SysTableLookup                      sysTableLookup = SysTableLookup::newParameters(tableNum(TmpMCRStr), _formControl);
+        RefRecId                            productID = _product;
+        TmpMCRStr                           tmpMCRStr;
+
+        if (_product == 0 && _itemId)
+        {
+            productID = EcoResProductMaster::find(InventTable::find(_itemId).Product).RecId;
+        }
+
+        tmpMCRStr = EcoResFlavor::mcrInsertTmpStrByProduct(productID);
+
+        // BP Deviation Documented
+        sysTableLookup.parmTmpBuffer(tmpMCRStr);
+        sysTableLookup.addLookupfield(fieldNum(TmpMCRStr, String15));
+        sysTableLookup.setLabel("@ProductFlavor_EcoResFlavor_Title");
+        sysTableLookup.addLookupfield(fieldNum(TmpMCRStr, Str60));
+        sysTableLookup.setLabel("@ProductFlavor_EcoResFlavor_Description");
+        sysTableLookup.addLookupfield(fieldNum(TmpMCRStr, Str1260));
+        sysTableLookup.setLabel("@ProductFlavor_EcoResFlavor_AdditionalDescription");
+
+        sysTableLookup.performFormLookup();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>resolveProductVariantFlavor</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///    Finds an <c>EcoResFlavor</c> record.
+    /// </summary>
+    /// <param name="_flavorName">
+    ///    The name of a flavor to find.
+    /// </param>
+    /// <param name="_productMaster">
+    ///    The ID of an <c>EcoResGenericProductMaster</c> record that identifies a product master for which a
+    ///    flavor is assigned.
+    /// </param>
+    /// <param name="_productDimensionAttribute">
+    ///    The ID of an <c>EcoResProductDimensionAttribute</c> record.
+    /// </param>
+    /// <returns>
+    ///    A <c>EcoResFlavor</c> buffer.
+    /// </returns>
+    /// <remarks>
+    ///    This function is used to resolve a flavor name to the ID of an <c>EcoResFlavor</c> record.It is
+    ///    resolved based on the flavors that are assigned to a specified product master.
+    /// </remarks>
+    static EcoResFlavor resolveProductVariantFlavor(
+        EcoResFlavorName     _flavorName,
+        RefRecId            _productMaster,
+        RefRecId            _productDimensionAttribute)
+    {
+        EcoResFlavor              ecoResFlavor;
+        EcoResProductMasterFlavor ecoResProductMasterFlavor;
+
+        select firstonly ecoResFlavor
+            where ecoResFlavor.Name == _flavorName
+        exists join ecoResProductMasterFlavor
+            where ecoResProductMasterFlavor.Flavor                            == ecoResFlavor.RecId
+               && ecoResProductMasterFlavor.FlavorProductMaster               == _productMaster
+               && ecoResProductMasterFlavor.FlavorProductDimensionAttribute   == _productDimensionAttribute;
+
+        if (!ecoResFlavor.RecId)
+        {
+            // Assigning null to selectedRecord does not cause the kernel to receive a true NULL value, but rather
+            // just an empty record. Return NULL directly so the kernel knows that the intent is to not clear the
+            // selected value.
+            return null;
+        }
+
+        return ecoResFlavor;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<DeveloperDocumentation>@ProductFlavor:EcoResFlavor_DeveloperDocumentation</DeveloperDocumentation>
+	<FormRef>EcoResProductMasterDimensionPerCompany</FormRef>
+	<Label>@ProductFlavor:EcoResFlavor_Title</Label>
+	<TableGroup>Main</TableGroup>
+	<TitleField1>Name</TitleField1>
+	<CacheLookup>Found</CacheLookup>
+	<ReplacementKey>NameIdx</ReplacementKey>
+	<SaveDataPerCompany>No</SaveDataPerCompany>
+	<DeleteActions />
+	<FieldGroups>
+		<AxTableFieldGroup>
+			<Name>AutoReport</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Name</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoLookup</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Name</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoIdentification</Name>
+			<AutoPopulate>Yes</AutoPopulate>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Name</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoSummary</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>AutoBrowse</Name>
+			<Fields />
+		</AxTableFieldGroup>
+		<AxTableFieldGroup>
+			<Name>Identification</Name>
+			<Label>@SYS5711</Label>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>Name</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroup>
+	</FieldGroups>
+	<Fields>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>Name</Name>
+			<AllowEdit>No</AllowEdit>
+			<ExtendedDataType>EcoResFlavorName</ExtendedDataType>
+			<Mandatory>Yes</Mandatory>
+		</AxTableField>
+	</Fields>
+	<FullTextIndexes />
+	<Indexes>
+		<AxTableIndex>
+			<Name>NameIdx</Name>
+			<AlternateKey>Yes</AlternateKey>
+			<Fields>
+				<AxTableIndexField>
+					<DataField>Name</DataField>
+				</AxTableIndexField>
+			</Fields>
+		</AxTableIndex>
+	</Indexes>
+	<Mappings />
+	<Relations />
+	<StateMachines />
+</AxTable>

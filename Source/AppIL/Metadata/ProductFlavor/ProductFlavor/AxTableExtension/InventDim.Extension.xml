@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTableExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventDim.Extension</Name>
+	<FieldGroupExtensions>
+		<AxTableFieldGroupExtension>
+			<Name>ProductDimensions</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>InventDimension1</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroupExtension>
+	</FieldGroupExtensions>
+	<FieldGroups />
+	<FieldModifications />
+	<Fields />
+	<Indexes />
+	<Mappings />
+	<PropertyModifications />
+	<Relations>
+		<AxTableRelation>
+			<Name>EcoResFlavor</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<OnDelete>Restricted</OnDelete>
+			<RelatedTable>EcoResFlavor</RelatedTable>
+			<RelatedTableCardinality>ZeroOne</RelatedTableCardinality>
+			<RelationshipType>Association</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>InventDimension1</Name>
+					<Field>InventDimension1</Field>
+					<RelatedField>Name</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+		</AxTableRelation>
+	</Relations>
+</AxTableExtension>
