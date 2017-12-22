@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResTmpProductVariantSuggestionFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>EcoResTmpProductVariantSuggestionFlavor_Extension</c> class extends the <c>EcoResTmpProductVariantSuggestion</c> table in order to add new flavor dimension functionality.
+/// </summary>
+[ExtensionOf(tableStr(EcoResTmpProductVariantSuggestion))]
+final public class EcoResTmpProductVariantSuggestionFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>productDimensionFieldId</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Returns a corresponding field Id for a product dimension.
+    /// </summary>
+    /// <param name = "_inventProductDimension">A product dimension.</param>
+    /// <returns>A field id.</returns>
+    protected static FieldId productDimensionFieldId(InventProductDimension _inventProductDimension)
+    {
+        FieldId productDimensionFieldId = next productDimensionFieldId(_inventProductDimension);
+
+        return _inventProductDimension is InventProductDimensionFlavor
+            ? fieldNum(EcoResTmpProductVariantSuggestion, Flavor)
+            : productDimensionFieldId;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>flavorName</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Gets the name of a flavor.
+    /// </summary>
+    /// <returns>
+    /// The name of the flavor.
+    /// </returns>
+    [SysClientCacheDataMethodAttribute(false)]
+    display EcoResFlavorName flavorName()
+    {
+        return EcoResFlavor::find(this.Flavor).Name;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

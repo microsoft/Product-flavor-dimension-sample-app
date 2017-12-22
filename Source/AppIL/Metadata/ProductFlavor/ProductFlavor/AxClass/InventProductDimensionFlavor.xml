@@ -86,6 +86,43 @@ class InventProductDimensionFlavor extends InventProductDimension
 ]]></Source>
 			</Method>
 			<Method>
+				<Name>createProductDimensionValue</Name>
+				<Source><![CDATA[
+    public void createProductDimensionValue(
+        EcoResDistinctProductVariant    _ecoResDistinctProductVariant,
+        EcoResProductDimensionAttribute _ecoResProductDimensionAttribute,
+        RefRecId                        _dimensionValue)
+    {
+        EcoResProductVariantFlavor ecoResProductVariantFlavor;
+        ecoResProductVariantFlavor.initFromDistinctProductVariant(_ecoResDistinctProductVariant);
+        ecoResProductVariantFlavor.ProductDimensionAttribute             = _ecoResProductDimensionAttribute.recId;
+        ecoResProductVariantFlavor.Flavor                                = _dimensionValue;
+
+        if (isConfigurationkeyEnabled(configurationKeyNum(Retail)))
+        {
+            EcoResProductMasterFlavor ecoResProductMasterFlavor;
+
+            select RetailWeight from ecoResProductMasterFlavor
+                where ecoResProductMasterFlavor.Flavor                == _dimensionValue &&
+                      ecoResProductMasterFlavor.FlavorProductMaster   == _ecoResDistinctProductVariant.ProductMaster;
+
+            ecoResProductVariantFlavor.RetailWeight = ecoResProductMasterFlavor.RetailWeight;
+
+            EcoResDistinctProductVariant ecoResDistinctProductVariant = EcoResDistinctProductVariant::find(_ecoResDistinctProductVariant.RecId, true);
+                    
+            if (ecoResDistinctProductVariant)
+            {
+                ecoResDistinctProductVariant.setCalculatedRetailTotalWeight(ecoResProductVariantFlavor.RetailWeight);
+                ecoResDistinctProductVariant.doUpdate();
+            }
+        }
+
+        ecoResProductVariantFlavor.insert();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
 				<Name>findTranslationByProduct</Name>
 				<Source><![CDATA[
     public EcoResProductMasterDimValueTranslation findTranslationByProduct(EcoResProductRecId _productMasterRecId, anytype _dimensionValue, SystemLanguageId _languageId)

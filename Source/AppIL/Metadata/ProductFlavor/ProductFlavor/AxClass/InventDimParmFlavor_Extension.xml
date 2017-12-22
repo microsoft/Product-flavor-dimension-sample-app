@@ -33,7 +33,7 @@ final class InventDimParmFlavor_Extension
     /// <returns>The field id.</returns>
     public static FieldID fieldIdFlavor()
     {
-        return InventDimParm::getFieldIdForDimension(classStr(InventProductDimensionFlavor));
+        return InventDimParm::fieldIdForDimension(classStr(InventProductDimensionFlavor));
     }
 
 ]]></Source>

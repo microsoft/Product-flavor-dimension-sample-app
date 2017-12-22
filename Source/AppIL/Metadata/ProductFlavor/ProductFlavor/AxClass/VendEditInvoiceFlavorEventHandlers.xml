@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>VendEditInvoiceFlavorEventHandlers</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>VendEditInvoiceFlavorEventHandlers</c> class hooks on the standard <c>VendEditInvoice</c> form events in order to support new flavor dimension.
+/// </summary>
+public static class VendEditInvoiceFlavorEventHandlers
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>VendEditInvoice_Initialized</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Adds flavor dimension column to the inventory dimensions group.
+    /// </summary>
+    /// <param name = "_sender">A form instance which sent the event.</param>
+    /// <param name = "_e">Event arguments.</param>
+    [FormEventHandler(formStr(VendEditInvoice), FormEventType::Initialized)]
+    public static void VendEditInvoice_Initialized(xFormRun _sender, FormEventArgs _e)
+    {
+        FormRun formRun = _sender as FormRun;
+        FormGroupControl inventoryDimensionsGroupControl = formRun.design().controlName('InventoryDimensions');
+
+        ProductFlavorFormViewModel::construct().addInventDimFlavorToContainerControl(
+            inventoryDimensionsGroupControl,
+            formDataSourceStr(VendEditInvoice, InventDim));
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

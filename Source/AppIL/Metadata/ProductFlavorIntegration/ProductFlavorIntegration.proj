@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns ="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+    <Import Project="$(EnvironmentConfig)" />
+    <PropertyGroup>
+        <Module>ProductFlavorIntegration</Module>
+        <InitXRef>False</InitXRef>
+        <GenerateXRef>True</GenerateXRef>
+    </PropertyGroup>
+    <Import Project ="$(INETROOT)\build\msbuild\bin\Microsoft.Dynamics.AX.Application.Build.targets" />
+</Project> 

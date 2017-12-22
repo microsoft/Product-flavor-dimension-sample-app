@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventItemOrderSetupFlavorEventHandlers</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>InventItemOrderSetupFlavorEventHandlers</c> class hooks on the standard <c>InventItemOrderSetup</c> form events in order to support new flavor dimension.
+/// </summary>
+public static class InventItemOrderSetupFlavorEventHandlers
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>InventItemOrderSetup_Initialized</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Adds flavor dimension column to the product dimensions group.
+    /// </summary>
+    /// <param name = "_sender">A form instance which sent the event.</param>
+    /// <param name = "_e">Event arguments.</param>
+    [FormEventHandler(formStr(InventItemOrderSetup), FormEventType::Initialized)]
+    public static void InventItemOrderSetup_Initialized(xFormRun _sender, FormEventArgs _e)
+    {
+        FormRun formRun = _sender as FormRun;
+        FormGroupControl ruleDimensions = formRun.design().controlName('RuleDimensions');
+
+        ProductFlavorFormViewModel::construct().addInventDimFlavorToContainerControl(
+            ruleDimensions,
+            formDataSourceStr(InventItemOrderSetup, InventDim));
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

@@ -3,20 +3,20 @@
 	<AppliedUpdates xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
 	<Customization>Allow</Customization>
 	<Description></Description>
-	<DisplayName>ProductFlavor</DisplayName>
-	<Id>895971654</Id>
+	<DisplayName>ProductFlavorIntegration</DisplayName>
+	<Id>895971656</Id>
 	<InternalsVisibleTo xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
 	<Layer>0</Layer>
 	<Locked>false</Locked>
-	<ModelModule>ProductFlavor</ModelModule>
+	<ModelModule>ProductFlavorIntegration</ModelModule>
 	<ModelReferences xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" i:nil="true" />
 	<ModuleReferences xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
 		<d2p1:string>ApplicationFoundation</d2p1:string>
 		<d2p1:string>ApplicationPlatform</d2p1:string>
 		<d2p1:string>ApplicationSuite</d2p1:string>
-		<d2p1:string>Retail</d2p1:string>
+		<d2p1:string>ProductFlavor</d2p1:string>
 	</ModuleReferences>
-	<Name>ProductFlavor</Name>
+	<Name>ProductFlavorIntegration</Name>
 	<Publisher>Microsoft Corporation</Publisher>
 	<VersionBuild>2001</VersionBuild>
 	<VersionMajor>7</VersionMajor>

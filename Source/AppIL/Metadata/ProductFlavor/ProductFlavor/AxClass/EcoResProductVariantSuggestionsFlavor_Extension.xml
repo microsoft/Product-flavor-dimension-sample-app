@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>EcoResProductVariantSuggestionsFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>EcoResProductVariantSuggestionsFlavor_Extension</c> class extends the <c>EcoResProductVariantSuggestions</c> form in order to add new flavor dimension functionality.
+/// </summary>
+[ExtensionOf(formstr(EcoResProductVariantSuggestions))]
+final public class EcoResProductVariantSuggestionsFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>postEnableDimensionControl</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Enables flavor column in case <paramref name="_tableId"/> corresponds to the <c>Flavor</c> table.
+    /// </summary>
+    /// <param name = "_tableId">A dimension table id.</param>
+    [PostHandlerFor(formStr(EcoResProductVariantSuggestions), formMethodStr(EcoResProductVariantSuggestions, enableDimensionControl))]
+    public static void postEnableDimensionControl(XppPrePostArgs _args)
+    {
+        TableId tableId = _args.getArg(identifierStr(_tableId));
+
+        if (tableId != tableNum(EcoResProductMasterFlavor))
+        {
+            return;
+        }
+
+        FormRun suggestionForm = _args.getThis();
+        FormControl flavorColumn = suggestionForm.design().controlName(formcontrolstr(EcoResProductVariantSuggestions, EcoResTmpProductVariantSuggestion_Flavor));
+
+        if (flavorColumn)
+        {
+            flavorColumn.visible(true);
+        }
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

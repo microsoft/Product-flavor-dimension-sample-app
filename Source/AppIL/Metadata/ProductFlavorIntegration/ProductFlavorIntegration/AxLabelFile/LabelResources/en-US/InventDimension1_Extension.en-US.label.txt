@@ -1,0 +1,6 @@
+EDTLabel=Flavor
+ ;The label of the inventory dimension
+ConfigurationKeyLabel=Flavor
+ ;The label for the configuration key
+FlagLabel=Flavor
+ ;The label for the flag extended data type

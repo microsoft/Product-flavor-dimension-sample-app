@@ -21,13 +21,11 @@ Project is meant to showcase the way to add new product dimension in a completel
 
 			ProductFlavor{amd64,app} \
 			ProductFlavorIntegration{amd64,app} \
-			ProductFlavorTests{amd64,app} \
 			
 - Edit \AxPackage\ChocolateyPackages\MetaPackagesApplication\PackageTable.csv file and add following lines:
 
 			productflavor,,,R,"R,C,D",,,T
 			productflavorintegration,,,R,"R,C,D",,,T
-			productflavortests,,,R,"R,C,D",,,T
 			
 - Enable InventDimension1 and EcoResProductFlavor configuration keys with the following x++ script: 
 

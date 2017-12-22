@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(EnvironmentConfig)" />
+  <PropertyGroup>
+    <TargetName>ProductFlavorIntegration</TargetName>
+    <ProjectGuid>{e997c5d6-b728-4547-82e9-9b3203c85f49}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="..\RunPackageCreation.targets" />
+  <Import Project="$(ExtendedTargetsPath)\NoTarget.targets" />
+</Project>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>ProductFlavorFormViewModel</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// The <c>ProductFlavorFormViewModel</c> class is the view model for the flavor form extensions.
+/// </summary>
+public class ProductFlavorFormViewModel
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>addInventDimFlavorToContainerControl</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Adds flavor form control to the container control.
+    /// </summary>
+    /// <param name = "_containerControl">A form control that supports adding a child control.</param>
+    /// <param name = "_dataSource">A flavor dimension data source name.</param>
+    public void addInventDimFlavorToContainerControl(anytype _containerControl, str _dataSource)
+    {
+        if (!_containerControl)
+        {
+            throw error(Error::wrongUseOfFunction(funcName()));
+        }
+
+        FormStringControl flavorControl = _containerControl.addControl(FormControlType::String, strFmt('%1_%2', _dataSource, extendedTypeStr(EcoResFlavorName)));
+        flavorControl.dataSource(_dataSource);
+        flavorControl.dataField(InventDim::fieldIdFlavor());
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>construct</Name>
+				<Source><![CDATA[
+    public static ProductFlavorFormViewModel construct()
+    {
+        return new ProductFlavorFormViewModel();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>new</Name>
+				<Source><![CDATA[
+    private void new()
+    {
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

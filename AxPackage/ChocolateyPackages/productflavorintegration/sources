@@ -1,0 +1,7 @@
+!INCLUDE $(INETROOT)\build\paths.all
+!INCLUDE $(INETROOT)\build\sources.all
+
+TARGETTYPE = NOTARGET
+TARGETNAME = RunPackageCreation
+
+MSBUILD_PROJECT = ProductFlavorIntegration.proj

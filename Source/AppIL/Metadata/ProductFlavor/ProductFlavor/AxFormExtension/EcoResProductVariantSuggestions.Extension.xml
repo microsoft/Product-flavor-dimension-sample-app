@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxFormExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="Microsoft.Dynamics.AX.Metadata.V6">
+	<Name>EcoResProductVariantSuggestions.Extension</Name>
+	<ControlModifications />
+	<Controls>
+		<AxFormExtensionControl xmlns="">
+			<Name>Copytzob2qpx1</Name>
+			<FormControl xmlns=""
+				i:type="AxFormReferenceGroupControl">
+				<Name>EcoResTmpProductVariantSuggestion_Flavor</Name>
+				<AutoDeclaration>Yes</AutoDeclaration>
+				<Type>ReferenceGroup</Type>
+				<Visible>No</Visible>
+				<FormControlExtension
+					i:nil="true" />
+				<Controls />
+				<DataSource>EcoResTmpProductVariantSuggestion</DataSource>
+				<ReferenceField>Flavor</ReferenceField>
+			</FormControl>
+			<Parent>Grid</Parent>
+		</AxFormExtensionControl>
+	</Controls>
+	<DataSources />
+	<Parts />
+	<PropertyModifications />
+</AxFormExtension>

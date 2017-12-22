@@ -7,5 +7,9 @@
 			<Name>StringSize</Name>
 			<Value>30</Value>
 		</AxPropertyModification>
+		<AxPropertyModification>
+			<Name>FormHelp</Name>
+			<Value>InventProductDimensionLookup</Value>
+		</AxPropertyModification>
 	</PropertyModifications>
 </AxEdtExtension>
