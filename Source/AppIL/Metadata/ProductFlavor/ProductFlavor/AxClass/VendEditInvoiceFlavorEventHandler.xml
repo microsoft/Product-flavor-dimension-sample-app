@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-	<Name>VendJournalMatch_PackingSlipFlavorEventHandlers</Name>
+	<Name>VendEditInvoiceFlavorEventHandler</Name>
 	<SourceCode>
 		<Declaration><![CDATA[
 /// <summary>
-/// The <c>VendJournalMatch_PackingSlipFlavorEventHandlers</c> class hooks on the standard <c>VendJournalMatch_PackingSlip</c> form events in order to support new flavor dimension.
+/// The <c>VendEditInvoiceFlavorEventHandler</c> class hooks on the standard <c>VendEditInvoice</c> form events in order to support new flavor dimension.
 /// </summary>
-public static class VendJournalMatch_PackingSlipFlavorEventHandlers
+public static class VendEditInvoiceFlavorEventHandler
 {
 }
 ]]></Declaration>
 		<Methods>
 			<Method>
-				<Name>VendJournalMatch_PackingSlip_Initialized</Name>
+				<Name>VendEditInvoice_Initialized</Name>
 				<Source><![CDATA[
     /// <summary>
-    /// Adds flavor dimension column to the purchase lines grid.
+    /// Adds flavor dimension column to the inventory dimensions group.
     /// </summary>
     /// <param name = "_sender">A form instance which sent the event.</param>
     /// <param name = "_e">Event arguments.</param>
-    [FormEventHandler(formStr(VendJournalMatch_PackingSlip), FormEventType::Initialized)]
-    public static void VendJournalMatch_PackingSlip_Initialized(xFormRun _sender, FormEventArgs _e)
+    [FormEventHandler(formStr(VendEditInvoice), FormEventType::Initialized)]
+    public static void VendEditInvoice_Initialized(xFormRun _sender, FormEventArgs _e)
     {
         FormRun formRun = _sender as FormRun;
         FormGroupControl inventoryDimensionsGroupControl = formRun.design().controlName('InventoryDimensions');
 
         ProductFlavorFormViewModel::construct().addInventDimFlavorToContainerControl(
             inventoryDimensionsGroupControl,
-            formDataSourceStr(VendJournalMatch_PackingSlip, InventDim));
+            formDataSourceStr(VendEditInvoice, InventDim));
     }
 
 ]]></Source>

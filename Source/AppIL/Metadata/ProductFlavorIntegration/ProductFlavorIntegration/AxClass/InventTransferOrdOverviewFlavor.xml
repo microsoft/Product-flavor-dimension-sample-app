@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventTransferOrdOverviewFlavor</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+///    The <c>InventTransferOrdOverviewFlavor</c> class is the target class for the
+///    <c>InventTransferOrderOverviewFlavor</c> menu item.
+/// </summary>
+static class InventTransferOrdOverviewFlavor
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>main</Name>
+				<Source><![CDATA[
+    public static void main(Args _args)
+    {
+        InventTransferOrdOverviewController  controller = new InventTransferOrdOverviewController();
+
+        controller.parmReportName(ssrsReportStr(InventTransferOrderOverviewFlavor, Report));
+        controller.parmArgs(_args);
+        controller.startOperation();
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

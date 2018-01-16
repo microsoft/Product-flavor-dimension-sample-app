@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxSecurityPrivilege xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventTransferOrderOverviewFlavorGenerate</Name>
+	<Description>@SYS144516</Description>
+	<Label>@SYS144515</Label>
+	<DataEntityPermissions />
+	<DirectAccessPermissions />
+	<EntryPoints>
+		<AxSecurityEntryPointReference>
+			<Name>InventTransferOrderOverviewFlavor</Name>
+			<Grant>
+				<Read>Allow</Read>
+			</Grant>
+			<ObjectName>InventTransferOrderOverviewFlavor</ObjectName>
+			<ObjectType>MenuItemOutput</ObjectType>
+			<Forms />
+		</AxSecurityEntryPointReference>
+	</EntryPoints>
+	<FormControlOverrides />
+</AxSecurityPrivilege>

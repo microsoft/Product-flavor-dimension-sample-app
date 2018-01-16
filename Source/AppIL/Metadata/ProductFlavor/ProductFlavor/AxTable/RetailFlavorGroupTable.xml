@@ -11,7 +11,7 @@ public class RetailFlavorGroupTable extends common
 			<Method>
 				<Name>delete</Name>
 				<Source><![CDATA[
-        /// <summary>
+    /// <summary>
     /// Deletes a record from <c>RetailFlavorGroupTable</c> table.
     /// </summary>
     /// <remarks>
@@ -51,7 +51,7 @@ public class RetailFlavorGroupTable extends common
 			<Method>
 				<Name>find</Name>
 				<Source><![CDATA[
-        /// <summary>
+    /// <summary>
     /// Finds the specified record in the <c>RetailFlavorGroupTable</c> table by using the specified
     /// <c>parameter</c> value.
     /// </summary>

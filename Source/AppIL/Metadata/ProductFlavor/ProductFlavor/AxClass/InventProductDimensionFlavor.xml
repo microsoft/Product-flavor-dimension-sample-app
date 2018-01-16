@@ -12,6 +12,16 @@ class InventProductDimensionFlavor extends InventProductDimension
 ]]></Declaration>
 		<Methods>
 			<Method>
+				<Name>extendedDataTypeId</Name>
+				<Source><![CDATA[
+    protected ExtendedTypeId extendedDataTypeId()
+    {
+        return extendedTypeNum(EcoResItemFlavorName);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
 				<Name>isActiveForItem</Name>
 				<Source><![CDATA[
     public boolean isActiveForItem(InventTable _inventTable)

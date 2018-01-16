@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-	<Name>ReqTransOverviewFlavorEventHandlers</Name>
+	<Name>ReqTransOverviewFlavorEventHandler</Name>
 	<SourceCode>
 		<Declaration><![CDATA[
 /// <summary>
-/// The <c>ReqTransOverviewFlavorEventHandlers</c> contains event handlers for events raised by the <c>ReqTransOverview</c> form 
+/// The <c>ReqTransOverviewFlavorEventHandler</c> contains event handlers for events raised by the <c>ReqTransOverview</c> form 
 /// in order to add new flavor dimension functionality.
 /// </summary>
-final public class ReqTransOverviewFlavorEventHandlers
+final public class ReqTransOverviewFlavorEventHandler
 {
 }
 ]]></Declaration>
@@ -28,8 +28,8 @@ final public class ReqTransOverviewFlavorEventHandlers
 
         inventDimDataSource.object(InventDim::fieldIdFlavor()).registerOverrideMethod(
                                                                     methodStr(FormDataObject, jumpref),
-                                                                    methodStr(ReqTransOverviewFlavorEventHandlers, ReqTransOverviewFlavor_JumpRef),
-                                                                    new ReqTransOverviewFlavorEventHandlers());
+                                                                    methodStr(ReqTransOverviewFlavorEventHandler, ReqTransOverviewFlavor_JumpRef),
+                                                                    new ReqTransOverviewFlavorEventHandler());
     }
 
 ]]></Source>

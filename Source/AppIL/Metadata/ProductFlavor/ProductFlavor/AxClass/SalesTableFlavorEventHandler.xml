@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-	<Name>SalesTableFlavorEventHandlers</Name>
+	<Name>SalesTableFlavorEventHandler</Name>
 	<SourceCode>
 		<Declaration><![CDATA[
 /// <summary>
-/// The <c>SalesTableFlavorEventHandlers</c> class hooks on the standard <c>SalesTable</c> form events in order to support new flavor dimension.
+/// The <c>SalesTableFlavorEventHandler</c> class hooks on the standard <c>SalesTable</c> form events in order to support new flavor dimension.
 /// </summary>
-public static class SalesTableFlavorEventHandlers
+public static class SalesTableFlavorEventHandler
 {
 }
 ]]></Declaration>

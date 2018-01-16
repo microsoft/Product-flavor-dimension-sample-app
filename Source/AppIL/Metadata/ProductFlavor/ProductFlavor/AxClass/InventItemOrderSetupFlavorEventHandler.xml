@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-	<Name>InventItemOrderSetupFlavorEventHandlers</Name>
+	<Name>InventItemOrderSetupFlavorEventHandler</Name>
 	<SourceCode>
 		<Declaration><![CDATA[
 /// <summary>
-/// The <c>InventItemOrderSetupFlavorEventHandlers</c> class hooks on the standard <c>InventItemOrderSetup</c> form events in order to support new flavor dimension.
+/// The <c>InventItemOrderSetupFlavorEventHandler</c> class hooks on the standard <c>InventItemOrderSetup</c> form events in order to support new flavor dimension.
 /// </summary>
-public static class InventItemOrderSetupFlavorEventHandlers
+public static class InventItemOrderSetupFlavorEventHandler
 {
 }
 ]]></Declaration>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-	<Name>RetailVariantLookupFlavorEventHandlers</Name>
+	<Name>RetailVariantLookupFlavorEventHandler</Name>
 	<SourceCode>
 		<Declaration><![CDATA[
 /// <summary>
-/// The <c>RetailVariantLookupFlavorEventHandlers</c> class hooks on the standard <c>RetailVariantLookup</c> form events in order to support new flavor dimension.
+/// The <c>RetailVariantLookupFlavorEventHandler</c> class hooks on the standard <c>RetailVariantLookup</c> form events in order to support new flavor dimension.
 /// </summary>
-public static class RetailVariantLookupFlavorEventHandlers
+public static class RetailVariantLookupFlavorEventHandler
 {
 }
 ]]></Declaration>

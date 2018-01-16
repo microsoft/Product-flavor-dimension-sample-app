@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxFormExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="Microsoft.Dynamics.AX.Metadata.V6">
+	<Name>InventTransferOrders.FlavorExtension</Name>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<ControlModifications>
+		<AxExtensionModification xmlns="">
+			<Name>InventTransferOrderOverview</Name>
+			<PropertyModifications>
+				<AxPropertyModification>
+					<Name>Visible</Name>
+					<Value>No</Value>
+				</AxPropertyModification>
+			</PropertyModifications>
+		</AxExtensionModification>
+	</ControlModifications>
+	<Controls>
+		<AxFormExtensionControl xmlns="">
+			<Name>Copynqzhxren1</Name>
+			<FormControl xmlns=""
+				i:type="AxFormMenuFunctionButtonControl">
+				<Name>InventTransferOrderOverviewFlavor</Name>
+				<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+				<ElementPosition>1431655764</ElementPosition>
+				<FilterExpression>%1</FilterExpression>
+				<HeightMode>Auto</HeightMode>
+				<Type>MenuFunctionButton</Type>
+				<VerticalSpacing>-1</VerticalSpacing>
+				<WidthMode>Auto</WidthMode>
+				<FormControlExtension
+					i:nil="true" />
+				<ButtonDisplay>TextOnly</ButtonDisplay>
+				<DataSource>InventTransferTable</DataSource>
+				<MenuItemName>InventTransferOrderOverviewFlavor</MenuItemName>
+				<MenuItemType>Output</MenuItemType>
+			</FormControl>
+			<Parent>PrintButtonGroup</Parent>
+		</AxFormExtensionControl>
+	</Controls>
+	<DataSources />
+	<Parts />
+	<PropertyModifications />
+</AxFormExtension>

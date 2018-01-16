@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxMenuItemOutput xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="Microsoft.Dynamics.AX.Metadata.V1">
+	<Name>InventTransferOrderOverviewFlavor</Name>
+	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+	<DisabledResource>0</DisabledResource>
+	<Label>@SYS78733</Label>
+	<LinkedPermissionObject>InventTransferOrderOverview</LinkedPermissionObject>
+	<LinkedPermissionObjectChild>Report</LinkedPermissionObjectChild>
+	<LinkedPermissionType>SSRSReport</LinkedPermissionType>
+	<MaintainUserLicense>Enterprise</MaintainUserLicense>
+	<NormalResource>0</NormalResource>
+	<Object>InventTransferOrdOverviewFlavor</Object>
+	<ObjectType>Class</ObjectType>
+	<ViewUserLicense>Universal</ViewUserLicense>
+</AxMenuItemOutput>
