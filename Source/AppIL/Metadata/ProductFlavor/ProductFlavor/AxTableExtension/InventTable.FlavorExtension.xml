@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AxTableExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-	<Name>InventTable.Extension</Name>
+	<Name>InventTable.FlavorExtension</Name>
 	<FieldGroupExtensions>
 		<AxTableFieldGroupExtension>
 			<Name>DefaultProductDimensions</Name>

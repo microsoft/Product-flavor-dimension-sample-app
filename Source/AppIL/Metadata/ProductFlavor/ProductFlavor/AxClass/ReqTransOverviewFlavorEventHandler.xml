@@ -4,7 +4,7 @@
 	<SourceCode>
 		<Declaration><![CDATA[
 /// <summary>
-/// The <c>ReqTransOverviewFlavorEventHandler</c> contains event handlers for events raised by the <c>ReqTransOverview</c> form 
+/// The <c>ReqTransOverviewFlavorEventHandler</c> contains event handlers for events raised by the <c>ReqTransOverview</c> form
 /// in order to add new flavor dimension functionality.
 /// </summary>
 final public class ReqTransOverviewFlavorEventHandler

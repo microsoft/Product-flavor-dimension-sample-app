@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-	<Name>InventDimFieldBinding_Flavor_Extension</Name>
+	<Name>InventDimFieldBindingFlavor_Extension</Name>
 	<SourceCode>
 		<Declaration><![CDATA[
 /// <summary>
@@ -8,9 +8,10 @@
 /// in order to map flavor product dimension to <c>InventDimension1</c> field.
 /// </summary>
 [ExtensionOf(tableStr(InventDimFieldBinding))]
-public final class InventDimFieldBinding_Flavor_Extension
+public final class InventDimFieldBindingFlavor_Extension
 {
 }
+
 ]]></Declaration>
 		<Methods>
 			<Method>

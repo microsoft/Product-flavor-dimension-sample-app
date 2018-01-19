@@ -4,7 +4,7 @@
 	<SourceCode>
 		<Declaration><![CDATA[
 /// <summary>
-/// The <c>EcoResProductVariantSuggestionsFlavorEventHandler</c> contains the handlers for events raised by <c>EcoResProductVariantSuggestions</c> form 
+/// The <c>EcoResProductVariantSuggestionsFlavorEventHandler</c> contains the handlers for events raised by <c>EcoResProductVariantSuggestions</c> form
 /// in order to add new flavor dimension functionality.
 /// </summary>
 final public class EcoResProductVariantSuggestionsFlavorEventHandler

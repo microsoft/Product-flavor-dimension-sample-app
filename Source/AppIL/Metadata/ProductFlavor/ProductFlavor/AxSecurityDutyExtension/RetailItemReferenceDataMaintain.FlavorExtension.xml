@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AxSecurityDutyExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-	<Name>RetailItemReferenceDataMaintain.Extension</Name>
+	<Name>RetailItemReferenceDataMaintain.FlavorExtension</Name>
 	<Privileges>
 		<AxSecurityPrivilegeReference>
 			<Name>RetailEcoResFlavorsMaintain</Name>
