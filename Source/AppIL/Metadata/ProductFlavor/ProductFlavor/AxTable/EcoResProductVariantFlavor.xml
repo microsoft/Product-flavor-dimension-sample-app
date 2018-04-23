@@ -172,6 +172,91 @@ public class EcoResProductVariantFlavor extends EcoResProductVariantDimensionVal
 
 ]]></Source>
 			</Method>
+			<Method>
+				<Name>insert</Name>
+				<Source><![CDATA[
+    public void insert()
+    {
+        if (this.recordMustBeInserted())
+        {
+            super();
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>write</Name>
+				<Source><![CDATA[
+    public void write()
+    {
+        if (this.recordMustBeWritten())
+        {
+            super();
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>validateWrite</Name>
+				<Source><![CDATA[
+    public boolean validateWrite()
+    {
+        boolean ret;
+
+        if (this.recordMustBeValidated())
+        {
+            ret = super();
+        }
+        else
+        {
+            ret = true;
+        }
+
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>recordMustBeWritten</Name>
+				<Source><![CDATA[
+    private boolean recordMustBeWritten()
+    {
+        FormDataSource formDataSource = this.dataSource() as FormDataSource;
+
+        // avoid updating a record due to the EcoResProductVariantsPerCompany form implementation.
+        return !formDataSource
+            || formDataSource.formRun().name() != formStr(EcoResProductVariantsPerCompany);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>recordMustBeInserted</Name>
+				<Source><![CDATA[
+    private boolean recordMustBeInserted()
+    {
+        // do not insert a record if a data source is disabled. 
+        // this allows to correctly handle products without new flavor dimension on the EcoResProductVariantsPerCompany form.
+        return this.recordMustBeValidated();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>recordMustBeValidated</Name>
+				<Source><![CDATA[
+    private boolean recordMustBeValidated()
+    {
+        FormDataSource formDataSource = this.dataSource() as FormDataSource;
+
+        return !formDataSource || (formDataSource.allowEdit() && formDataSource.allowCreate());
+    }
+
+]]></Source>
+			</Method>
 		</Methods>
 	</SourceCode>
 	<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>

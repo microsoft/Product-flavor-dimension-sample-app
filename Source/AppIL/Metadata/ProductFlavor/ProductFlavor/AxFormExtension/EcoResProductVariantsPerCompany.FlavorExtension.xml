@@ -153,6 +153,7 @@
 			<JoinSource>EcoResDistinctProductVariant</JoinSource>
 			<LinkType>OuterJoin</LinkType>
 			<AllowCheck>No</AllowCheck>
+			<InsertIfEmpty>No</InsertIfEmpty>
 			<DataSourceLinks />
 			<DerivedDataSources />
 		</AxFormDataSource>

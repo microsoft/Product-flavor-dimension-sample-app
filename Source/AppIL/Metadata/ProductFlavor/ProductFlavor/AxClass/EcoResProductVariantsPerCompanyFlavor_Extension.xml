@@ -57,28 +57,6 @@ final public class EcoResProductVariantsPerCompanyFlavor_Extension
 ]]></Source>
 			</Method>
 			<Method>
-				<Name>ecoResProductVariantFlavor_ValidatingWrite</Name>
-				<Source><![CDATA[
-    /// <summary>
-    /// Hooks on ValidatingWrite event of the <c>EcoResProductVariantFlavor</c> form data source and cancels the validation in case the dimension data source is not active.
-    /// </summary>
-    /// <param name = "_sender">The data source object that triggers the event.</param>
-    /// <param name = "_e">Event arguments.</param>
-    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor), FormDataSourceEventType::ValidatingWrite)]
-    public void ecoResProductVariantFlavor_ValidatingWrite(FormDataSource _sender, FormDataSourceEventArgs _e)
-    {
-        FormDataSourceCancelEventArgs cancelable = _e as FormDataSourceCancelEventArgs;
-
-        if (!this.productVariantsFormHelper().isDimensionDatasourceActive(_sender)
-            && cancelable)
-        {
-            cancelable.cancel(true);
-        }
-    }
-
-]]></Source>
-			</Method>
-			<Method>
 				<Name>EcoResProductVariants_Initialized</Name>
 				<Source><![CDATA[
     /// <summary>
@@ -98,27 +76,36 @@ final public class EcoResProductVariantsPerCompanyFlavor_Extension
             return;
         }
 
-        FormReferenceObject fieldObject = productVariantFlavorDataSource.object(fieldNum(EcoResProductVariantFlavor, Flavor));
+        if (!formRun.productVariantsFormHelper().isDimensionDatasourceActive(productVariantFlavorDataSource))
+        {
+            productVariantFlavorDataSource.allowEdit(false);
+            productVariantFlavorDataSource.allowCreate(false);
+        }
+        else
+        {
 
-        fieldObject.registerOverrideMethod(
-            methodStr(FormDataObject, jumpref),
-            formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_JumpRef),
-            formRun);
+            FormReferenceObject fieldObject = productVariantFlavorDataSource.object(fieldNum(EcoResProductVariantFlavor, Flavor));
 
-        fieldObject.registerOverrideMethod(
-            methodStr(FormDataObject, modified),
-            formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_Modified),
-            formRun);
+            fieldObject.registerOverrideMethod(
+                methodStr(FormDataObject, jumpref),
+                formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_JumpRef),
+                formRun);
 
-        fieldObject.registerOverrideMethod(
-            methodStr(FormReferenceObject, resolveReference),
-            formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_ResolveReference),
-            formRun);
+            fieldObject.registerOverrideMethod(
+                methodStr(FormDataObject, modified),
+                formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_Modified),
+                formRun);
 
-        fieldObject.registerOverrideMethod(
-            methodStr(FormReferenceObject, lookupReference),
-            formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_LookupReference),
-            formRun);
+            fieldObject.registerOverrideMethod(
+                methodStr(FormReferenceObject, resolveReference),
+                formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_ResolveReference),
+                formRun);
+
+            fieldObject.registerOverrideMethod(
+                methodStr(FormReferenceObject, lookupReference),
+                formMethodStr(EcoResProductVariantsPerCompany, EcoResProductVariantFlavor_Flavor_LookupReference),
+                formRun);
+        }
     }
 
 ]]></Source>
