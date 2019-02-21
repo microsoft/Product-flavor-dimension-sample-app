@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxViewExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>InventDistinctProductExpanded.FlavorExtension</Name>
+	<DataSources />
+	<FieldGroupExtensions />
+	<FieldGroups />
+	<Fields>
+		<AxViewField xmlns=""
+			i:type="AxViewFieldBound">
+			<Name>InventDimension1</Name>
+			<DataField>InventDimension1</DataField>
+			<DataSource>InventDistinctProduct</DataSource>
+		</AxViewField>
+	</Fields>
+	<Mappings />
+	<PropertyModifications />
+	<Ranges />
+</AxViewExtension>
