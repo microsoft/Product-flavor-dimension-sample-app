@@ -6,7 +6,7 @@
 	<DisplayName>ProductFlavor</DisplayName>
 	<Id>895971654</Id>
 	<InternalsVisibleTo xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-	<Layer>0</Layer>
+	<Layer>8</Layer>
 	<Locked>false</Locked>
 	<ModelModule>ProductFlavor</ModelModule>
 	<ModelReferences xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" i:nil="true" />
@@ -18,8 +18,8 @@
 	</ModuleReferences>
 	<Name>ProductFlavor</Name>
 	<Publisher>Microsoft Corporation</Publisher>
-	<VersionBuild>2024</VersionBuild>
-	<VersionMajor>7</VersionMajor>
-	<VersionMinor>3</VersionMinor>
+	<VersionBuild>1</VersionBuild>
+	<VersionMajor>10</VersionMajor>
+	<VersionMinor>0</VersionMinor>
 	<VersionRevision>0</VersionRevision>
 </AxModelInfo>
