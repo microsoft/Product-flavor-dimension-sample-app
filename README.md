@@ -15,19 +15,20 @@ Project is meant to showcase the way to add new product dimension in a completel
 10. Create purchase order, confirm and receive it.
 11. Create sales order, ship it.
 
+### Prerequisites
+	- Platform version 23 or later.
+	- Application version 8.0 or later.
+
 ### Getting started
-- Copy content of the repo into RainMain folder
-- Edit \AxPackage\ChocolateyPackages\dirs file and add following lines:
-
-			ProductFlavor{amd64,app} \
-			ProductFlavorIntegration{amd64,app} \
-			
-- Edit \AxPackage\ChocolateyPackages\MetaPackagesApplication\PackageTable.csv file and add following lines:
-
-			productflavor,,,R,"R,C,D",,,T
-			productflavorintegration,,,R,"R,C,D",,,T
-			
-- Enable InventDimension1 and EcoResProductFlavor configuration keys with the following x++ script: 
+	- Go to the metadata folder.
+	
+	- Run the Install.ps1 powershell script. It might need to be be run with elevated priviligies as Administrator.
+		Running this script will without warning replace the ProductFlavor and ProductFlavorIntegration models.
+		This will delete any customizations made to either of these two models.
+	
+	- Build/Rebuild the flavor models.
+	
+	- Enable InventDimension1 and EcoResProductFlavor configuration keys with the following X++ script: 
 
 	        ConfigurationKeySet set = new ConfigurationKeySet();
 	        set.loadSystemSetup();
@@ -35,8 +36,9 @@ Project is meant to showcase the way to add new product dimension in a completel
 	        set.enabled(configurationKeyNum(EcoResProductFlavor),  true);
 	        SysDictConfigurationKey::save(set.pack());
 	        SysSecurity::reload(true, true, true);
-			
-- Rebuild flavor models
+
+	- Synchronize the database.
+		If the database is synchronized before enabling the configuration keys, not all changes are made to the data model on the SQL database.
 	
 
 ### Extensibility guideline

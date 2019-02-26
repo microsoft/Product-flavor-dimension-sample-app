@@ -1,3 +1,0 @@
-BUILD_PASS1_CONSUMES = \
-    source\foundation\droppackages|PASS1 \
-    source\appil\metadata\applicationsuite|PASS1 \
