@@ -7,8 +7,8 @@
 	<Fields>
 		<AxViewField xmlns=""
 			i:type="AxViewFieldBound">
-			<Name>InventDimension1</Name>
-			<DataField>InventDimension1</DataField>
+			<Name>EcoResFlavorName</Name>
+			<DataField>EcoResFlavorName</DataField>
 			<DataSource>InventDistinctProduct</DataSource>
 		</AxViewField>
 	</Fields>

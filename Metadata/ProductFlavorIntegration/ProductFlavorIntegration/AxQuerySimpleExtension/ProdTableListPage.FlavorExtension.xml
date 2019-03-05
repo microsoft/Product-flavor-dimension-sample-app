@@ -13,7 +13,7 @@
 				<Name>QueryDataSourceRelation3</Name>
 				<Field>InventDimension1</Field>
 				<JoinDataSource>InventDim</JoinDataSource>
-				<RelatedField>InventDimension1</RelatedField>
+				<RelatedField>EcoResFlavorName</RelatedField>
 			</QueryDataSourceRelation>
 		</AxQueryExtensionQueryDataSourceRelation>
 	</Relations>

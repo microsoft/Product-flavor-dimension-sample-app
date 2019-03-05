@@ -7,9 +7,9 @@
 	<Fields>
 		<AxTableField xmlns=""
 			i:type="AxTableFieldString">
-			<Name>InventDimension1</Name>
+			<Name>EcoResFlavorName</Name>
 			<AssetClassification>Customer Content</AssetClassification>
-			<ExtendedDataType>InventDimension1</ExtendedDataType>
+			<ExtendedDataType>EcoResFlavorName</ExtendedDataType>
 		</AxTableField>
 	</Fields>
 	<Indexes />
