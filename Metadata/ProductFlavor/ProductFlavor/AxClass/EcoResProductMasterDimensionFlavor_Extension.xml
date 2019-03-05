@@ -143,79 +143,6 @@ public final class EcoResProductMasterDimensionFlavor_Extension
 ]]></Source>
 			</Method>
 			<Method>
-				<Name>productMasDimValueTranslationFlavor_InitValue</Name>
-				<Source><![CDATA[
-     ///<summary>
-     ///Hooks on <c>ProductMasDimValueTranslationFlavor</c> data source InitValue event and sets initial field values.
-     ///</summary>
-     ///<param name = "_sender">An object triggered the event.</param>
-     ///<param name = "_e">The event arguments.</param>
-    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor), FormDataSourceEventType::InitValue)]
-    public void productMasDimValueTranslationFlavor_InitValue(FormDataSource _sender, FormDataSourceEventArgs _e)
-    {   
-        ProductMasDimValueTranslationFlavor.ProductMasterDimensionValue = this.parmInitialFK(); //Initialize to a non-zero value in order to avoid validateWrite to fail
-    }
-
-]]></Source>
-			</Method>
-			<Method>
-				<Name>productMasDimValueTranslationFlavor_ValidatingWrite</Name>
-				<Source><![CDATA[
-    /// <summary>
-    /// Hooks on <c>ProductMasDimValueTranslationFlavor</c> data source ValidatingWrite event and updates the link to product master dimension value.
-    /// </summary>
-    /// <param name = "_sender">An object triggered the event.</param>
-    /// <param name = "_e">The event arguments.</param>
-    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor), FormDataSourceEventType::ValidatingWrite)]
-    public void productMasDimValueTranslationFlavor_ValidatingWrite(FormDataSource _sender, FormDataSourceEventArgs _e)
-    {
-        this.validateWriteHelper(ProductMasDimValueTranslationFlavor, EcoResProductMasterFlavor.RecId);
-    }
-
-]]></Source>
-			</Method>
-			<Method>
-				<Name>productMasDimValueTranslationFlavor_Writing</Name>
-				<Source><![CDATA[
-    /// <summary>
-    /// Hooks on <c>ProductMasDimValueTranslationFlavor</c> data source Writing event and writes translations to the db.
-    /// </summary>
-    /// <param name = "_sender">An object triggered the event.</param>
-    /// <param name = "_e">The event arguments.</param>
-    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor), FormDataSourceEventType::Writing)]
-    public void productMasDimValueTranslationFlavor_Writing(FormDataSource _sender, FormDataSourceEventArgs _e)
-    {
-        FormRun formRun = _sender.formRun();
-        FormDataSource ecoResProductMasterFlavor_ds = formRun.dataSource(formDataSourceStr(EcoResProductMasterDimension, EcoResProductMasterFlavor)) as FormDataSource;
-        FormDataSource ProductMasDimValueTranslationFlavor_ds = formRun.dataSource(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor)) as FormDataSource;
-
-        this.writeHelper(ProductMasDimValueTranslationFlavor, EcoResProductMasterFlavor, ProductMasDimValueTranslationFlavor_ds, ecoResProductMasterFlavor_ds as FormDataSource);
-    }
-
-]]></Source>
-			</Method>
-			<Method>
-				<Name>productMasDimValueTranslationFlavor_Initialized</Name>
-				<Source><![CDATA[
-    /// <summary>
-    /// Hooks on the <c>ProductMasDimValueTranslationFlavor</c> data source Initialized event and adjusts the data source query.
-    /// </summary>
-    /// <param name = "_sender">An object triggered the event.</param>
-    /// <param name = "_e">The event arguments.</param>
-    [FormDataSourceEventHandler(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor), FormDataSourceEventType::Initialized)]
-    public void productMasDimValueTranslationFlavor_Initialized(FormDataSource _sender, FormDataSourceEventArgs _e)
-    {
-        FormRun formRun = _sender.formRun();
-        FormDataSource ProductMasDimValueTranslationFlavor_ds = formRun.dataSource(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor)) as FormDataSource;
-
-        QueryBuildDataSource qbds = ProductMasDimValueTranslationFlavor_ds.query().dataSourceTable(tableNum(EcoResProductMasterDimValueTranslation));
-
-        this.initHelperAddRangeLink(qbds, fieldNum(EcoResProductMasterFlavor, RecId));
-    }
-
-]]></Source>
-			</Method>
-			<Method>
 				<Name>initInventDimensionsMetadataEntries</Name>
 				<Source><![CDATA[
     /// <summary>
@@ -224,11 +151,14 @@ public final class EcoResProductMasterDimensionFlavor_Extension
     protected void initInventDimensionsMetadataEntries()
     {
         next initInventDimensionsMetadataEntries();
-        
-        this.addInventDimensionMetadata(
-            InventDim::fieldIdFlavor(),
-            tabPageFlavors,
-            EcoResProductMasterFlavor_RetailDisplayOrder);
+            
+        if (isConfigurationkeyEnabled(configurationKeyNum(EcoResProductFlavor)))
+        {
+            this.addInventDimensionMetadata(
+                InventDim::fieldIdFlavor(),
+                tabPageFlavors,
+                EcoResProductMasterFlavor_RetailDisplayOrder);
+        }
     }
 
 ]]></Source>

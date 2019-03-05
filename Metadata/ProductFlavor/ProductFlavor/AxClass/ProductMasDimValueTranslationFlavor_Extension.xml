@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>ProductMasDimValueTranslationFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+///     The <c>ProductMasDimValueTranslationFlavor_Extension</c> class extends the <c>ProductMasDimValueTranslationFlavor</c> form
+///     data source to the correct support for product dimension translation.
+/// </summary>
+[ExtensionOf(formDataSourceStr(EcoResProductMasterDimension, ProductMasDimValueTranslationFlavor))]
+public final class ProductMasDimValueTranslationFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>init</Name>
+				<Source><![CDATA[
+    public void init()
+    {
+        next init();
+
+        QueryBuildDataSource qbds = this.query().dataSourceTable(tableNum(EcoResProductMasterDimValueTranslation));
+        element.initHelperAddRangeLink(qbds, fieldNum(EcoResProductMasterFlavor, RecId));
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>initValue</Name>
+				<Source><![CDATA[
+    public void initValue()
+    {
+        next initValue();
+
+        EcoResProductMasterDimValueTranslation ecoResProductMasterDimValueTranslation = element.ProductMasDimValueTranslationFlavor;
+        ecoResProductMasterDimValueTranslation.ProductMasterDimensionValue = element.parmInitialFK(); //Initialize to a non-zero value to avoid validateWrite to fail
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>validateWrite</Name>
+				<Source><![CDATA[
+    public boolean validateWrite()
+    {
+        element.validateWriteHelper(element.ProductMasDimValueTranslationFlavor, element.EcoResProductMasterFlavor.RecId);
+
+        if (! element.ProductMasDimValueTranslationFlavor.canMaintainTranslation())
+        {
+            return true;
+        }
+
+        return next validateWrite();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>write</Name>
+				<Source><![CDATA[
+    public void write()
+    {
+        element.writeHelper(element.ProductMasDimValueTranslationFlavor,  element.EcoResProductMasterFlavor, this, element.EcoResProductMasterFlavor_DS);
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>
