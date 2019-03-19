@@ -81,6 +81,9 @@
 			<Moniker>BPDeprecatedFormAndControlPropertySweeper</Moniker>
 		</Rule>
 		<Rule>
+			<Moniker>BPDeprecatedUOMProductParameter</Moniker>
+		</Rule>			
+		<Rule>
 			<Moniker>BPClientLocalFileAccess</Moniker>
 		</Rule>
 		<Rule>

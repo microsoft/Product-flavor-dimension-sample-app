@@ -22,10 +22,13 @@ final public class EcoResProductDetailsExtendedFlavor_Extension
     {
         next initInventDimensionsMetadataEntries();
         
-        this.addInventDimensionMetadata(
-            InventDim::fieldIdFlavor(),
-            fieldNum(InventTable, AltInventFlavorId),
-            fieldNum(InventTable, StandardInventFlavorId));
+        if (isConfigurationkeyEnabled(configurationKeyNum(EcoResProductFlavor)))
+        {
+            this.addInventDimensionMetadata(
+                InventDim::fieldIdFlavor(),
+                fieldNum(InventTable, AltInventFlavorId),
+                fieldNum(InventTable, StandardInventFlavorId));
+        }
     }
 
 ]]></Source>

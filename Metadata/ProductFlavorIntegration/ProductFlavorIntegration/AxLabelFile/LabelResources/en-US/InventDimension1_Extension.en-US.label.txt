@@ -1,4 +1,4 @@
-EDTLabel=Flavor
+﻿EDTLabel=Flavor
  ;The label of the inventory dimension
 ConfigurationKeyLabel=Flavor
  ;The label for the configuration key

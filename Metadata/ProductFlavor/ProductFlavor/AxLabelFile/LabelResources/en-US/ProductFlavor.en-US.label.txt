@@ -1,4 +1,4 @@
-Name=Flavor
+﻿Name=Flavor
  ;Flavor dimension title.
 EcoResFlavor_Description=Description
  ;Flavor dimension description.
