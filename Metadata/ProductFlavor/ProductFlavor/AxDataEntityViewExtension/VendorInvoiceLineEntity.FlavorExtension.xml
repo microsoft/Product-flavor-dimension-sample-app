@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxDataEntityViewExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>VendorInvoiceLineEntity.FlavorExtension</Name>
+	<DataSources />
+	<FieldGroupExtensions />
+	<FieldGroups />
+	<FieldModifications />
+	<Fields>
+		<AxDataEntityViewField xmlns=""
+			i:type="AxDataEntityViewUnmappedFieldString">
+			<Name>ProductFlavor</Name>
+			<ConfigurationKey>EcoResProductFlavor</ConfigurationKey>
+			<ComputedFieldMethod>VendorInvoiceLineEntityFlavor_Extension::computeProductFlavor</ComputedFieldMethod>
+			<ExtendedDataType>EcoResItemFlavorName</ExtendedDataType>
+		</AxDataEntityViewField>
+	</Fields>
+	<Mappings />
+	<PropertyModifications />
+	<Relations />
+</AxDataEntityViewExtension>

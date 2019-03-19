@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>VendorInvoiceLineEntityFlavor_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+///     The <c>VendorInvoiceLineEntityFlavor_Extension</c> class extends the <c>VendorInvoiceLineEntity</c> data entity
+///     to dynamically populate the product flavor field in the data entity.
+/// </summary>
+[ExtensionOf(dataentityviewstr(VendorInvoiceLineEntity))]
+public final class VendorInvoiceLineEntityFlavor_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>computeProductFlavor</Name>
+				<Source><![CDATA[
+    /// <summary>
+    ///     Creates the T-SQL needed to represent the ProductFlavor column in the data entity.
+    /// </summary>
+    /// <returns>
+    ///     A string representation of the T-SQL script.
+    /// </returns>
+    /// <remarks>
+    ///     The <c>ProductFlavor</c> column in the data entity will return NULL until the Product Flavor configuration key is disabled.
+    /// </remarks>
+    public static str computeProductFlavor()
+    {
+        if (isConfigurationkeyEnabled(configurationKeyNum(EcoResProductFlavor)))
+        {
+            return SysComputedColumn::returnField(dataentityviewstr(VendorInvoiceLineEntity),
+                                                  dataEntityDataSourceStr(VendorInvoiceLineEntity, InventDim),
+                                                  fieldId2Name(tableNum(InventDim), InventProductDimensionFlavor::getInstance().parmInventDimFieldId()));
+        }
+
+        return SysComputedColumn::returnLiteral('');
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>
