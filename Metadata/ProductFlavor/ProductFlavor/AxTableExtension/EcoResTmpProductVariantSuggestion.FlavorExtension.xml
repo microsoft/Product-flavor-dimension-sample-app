@@ -6,7 +6,7 @@
 			<Name>ProductDimensions</Name>
 			<Fields>
 				<AxTableFieldGroupField>
-					<DataField>flavorName</DataField>
+					<DataField>EcoResTmpProductVariantSuggestionFlavor_Extension::flavorName</DataField>
 				</AxTableFieldGroupField>
 			</Fields>
 		</AxTableFieldGroupExtension>
